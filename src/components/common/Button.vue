@@ -306,7 +306,7 @@ defineEmits(["click"]);
   &:hover:not(:disabled) {
     box-shadow: $shadow-md;
     transform: translateY(-2px);
-    background-color: darken($danger-color, 5%);
+    background-color: $primary-pure-color;
   }
 
   &:active:not(:disabled) {
