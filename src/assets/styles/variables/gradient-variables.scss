@@ -1,0 +1,7 @@
+$gradient-primary: linear-gradient(
+  135deg,
+  $primary-color 0%,
+  $primary-dark-color 100%
+);
+$gradient-success: linear-gradient(135deg, $success-color 0%, #1e8449 100%);
+$gradient-danger: linear-gradient(135deg, $danger-color 0%, #c0392b 100%);

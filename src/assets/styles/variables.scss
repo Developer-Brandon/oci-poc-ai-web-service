@@ -1,0 +1,27 @@
+/**
+ * src/assets/styles/variables
+ * 
+ * SCSS 전역 변수들을 정의합니다.
+ * 
+ * 장점:
+ * 1. 전체 디자인의 일관성 유지
+ * 2. 추후 색상 변경 시 한 곳만 수정
+ * 3. 다크 모드 등 테마 변경 용이
+ * 
+ * 사용 예시:
+ * .button {
+ *   background-color: $primary-color;
+ *   padding: $spacing-md;
+ * }
+ */
+
+/* ==================== 색상 정의 ==================== */
+@use "./variables/border-variables";
+@use "./variables/color-variables";
+@use "./variables/font-variables";
+@use "./variables/gradient-variables";
+@use "./variables/media-query-breakpoint-variables";
+@use "./variables/shadow-variables";
+@use "./variables/spacing-variables";
+@use "./variables/transition-variables";
+@use "./variables/z-index-variables";

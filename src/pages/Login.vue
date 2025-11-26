@@ -1,0 +1,919 @@
+<!--
+  pages/Login.vue
+  
+  로그인 페이지 메인 컴포넌트
+  
+  구성:
+  1. 왼쪽: 로그인 폼 (입력 필드, 버튼, 링크)
+  2. 오른쪽: 배경 그래픽 (애니메이션)
+  
+  디자인: PDF 기획안 참고
+  - OCI 브랜드 컬러 (빨강)
+  - 라운드한 디자인
+  - 부드러운 애니메이션
+  
+  Vue3 특징:
+  - ref: 리액티브 데이터 (이메일, 비밀번호, 에러 등)
+  - computed: 폼 유효성 검사
+  - onMounted: 페이지 로드 시 저장된 이메일 복원
+  - async/await: 로그인 비동기 처리
+-->
+
+<template>
+  <!-- 
+    로그인 페이지 전체 컨테이너
+    
+    100vh: 전체 화면 높이
+    display: flex: 왼쪽/오른쪽 두 섹션 배치
+  -->
+  <div class="login-page">
+    <!-- ==================== 왼쪽: 로그인 폼 섹션 ==================== -->
+    <div class="login-form-section">
+      <!-- 폼 컨테이너 -->
+      <div class="login-container">
+        <!-- 
+          헤더: 제목 및 설명
+          
+          PDF 디자인에서:
+          "로그인"
+          "OCI AI Web Service 에 오신것을 환영합니다"
+        -->
+        <div class="login-header">
+          <h1 class="login-title">로그인</h1>
+          <p class="login-subtitle">
+            OCI AI Web Service 에 오신것을 환영합니다
+          </p>
+        </div>
+
+        <!-- 
+          로그인 폼
+          
+          @submit.prevent: 기본 폼 제출 동작 방지 (Vue에서 처리)
+        -->
+        <form class="login-form" @submit.prevent="handleLogin">
+          <!-- ========== 이메일 입력 필드 ========== -->
+          <div class="form-group">
+            <!-- 
+              InputField 컴포넌트 사용
+              
+              v-model: 양방향 바인딩 (email.value와 동기)
+              type="email": 이메일 타입 (검증 지원)
+              placeholder: 힌트 텍스트
+              :error: 에러 메시지 (있으면 표시)
+              disabled: 로딩 중 입력 금지
+              
+              #default 슬롯: 좌측 아이콘 (이메일 아이콘)
+            -->
+            <InputField
+              v-model="email"
+              type="email"
+              placeholder="ID(email)"
+              :error="formErrors.email"
+              :disabled="isLoading"
+            >
+              <!-- 이메일 아이콘 (emoji 사용 - 간단함) -->
+              ✉️
+            </InputField>
+          </div>
+
+          <!-- ========== 비밀번호 입력 필드 ========== -->
+          <div class="form-group">
+            <!-- 
+              InputField 컴포넌트
+              
+              type="password": 비밀번호 필드
+              - 입력값이 점(●)으로 표시됨
+              - 우측에 눈 아이콘으로 표시/숨기 토글
+              
+              showPassword 상태로 실제 비밀번호 표시 가능
+            -->
+            <InputField
+              v-model="password"
+              type="password"
+              placeholder="Password"
+              :error="formErrors.password"
+              :disabled="isLoading"
+            >
+              <!-- 비밀번호 아이콘 -->
+              🔐
+            </InputField>
+          </div>
+
+          <!-- ========== 로그인 버튼 ========== -->
+          <Button
+            type="submit"
+            variant="primary"
+            size="lg"
+            fullWidth
+            :loading="isLoading"
+            @click="handleLogin"
+          >
+            로그인
+          </Button>
+
+          <!-- ========== 에러 메시지 (전체 폼) ========== -->
+          <div v-if="error" class="form-error">
+            <span class="error-icon">⚠️</span>
+            <span class="error-text">{{ error }}</span>
+          </div>
+
+          <!-- ========== 체크박스: 아이디 저장 ========== -->
+          <Checkbox
+            v-model="rememberEmail"
+            label="아이디 저장"
+            class="remember-email-checkbox"
+          />
+        </form>
+
+        <!-- 
+          하단 링크
+          
+          "비밀번호 찾기" | "계정 생성"
+          
+          현재는 v-on:click 미구현 (추후 라우터로 페이지 이동)
+        -->
+        <div class="login-footer">
+          <button
+            type="button"
+            class="link-button"
+            @click="handleForgotPassword"
+          >
+            비밀번호 찾기
+          </button>
+          <span class="divider">|</span>
+          <button type="button" class="link-button" @click="handleSignup">
+            계정 생성
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 오른쪽: 배경 그래픽 섹션 ==================== -->
+    <div class="login-graphic-section">
+      <!-- 
+        배경 그라디언트 + 애니메이션 요소들
+        
+        PDF 디자인:
+        - 분홍색/흰색 그라디언트 배경
+        - 중앙에 원(circle)
+        - 여러 개의 움직이는 점(dots)
+        - "AI Works" 텍스트
+      -->
+
+      <!-- 배경 색상 컨테이너 -->
+      <div class="graphic-background">
+        <!-- 
+          중앙 원형 요소
+          
+          애니메이션: 부드러운 회전 + 펄스
+        -->
+        <div class="center-circle">
+          <!-- 내부 원 (작은 원) -->
+          <div class="circle-inner"></div>
+        </div>
+
+        <!-- 
+          움직이는 점들 (Floating Dots)
+          
+          각 점이 다른 위치에서 애니메이션
+          부드럽고 트렌디한 효과
+        -->
+        <div class="floating-dots">
+          <!-- 
+            각 점마다 다른 애니메이션 지연 적용
+            
+            @keyframes float를 별도로 정의하여
+            자연스러운 움직임 표현
+          -->
+          <div class="dot dot-1"></div>
+          <div class="dot dot-2"></div>
+          <div class="dot dot-3"></div>
+          <div class="dot dot-4"></div>
+          <div class="dot dot-5"></div>
+          <div class="dot dot-6"></div>
+          <div class="dot dot-7"></div>
+        </div>
+
+        <!-- 
+          "AI Works" 텍스트
+          
+          투명도가 낮아서 배경처럼 보임
+          사용자의 시선을 방해하지 않음
+        -->
+        <div class="graphic-text">AI Works</div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+/**
+ * Vue3 Composition API with <script setup>
+ *
+ * Vue2 (Options API):
+ * ```
+ * export default {
+ *   data() { return { email: '', password: '', ... } },
+ *   computed: { isFormValid() { ... } },
+ *   methods: { handleLogin() { ... } },
+ *   mounted() { ... }
+ * }
+ * ```
+ *
+ * Vue3 (Composition API + <script setup>):
+ * - 변수는 ref()로 감싸기
+ * - 함수는 일반 함수로 정의
+ * - 자동으로 템플릿에 노출 (return 불필요)
+ * - 코드 순서를 자유롭게 배열 가능
+ * - 더 나은 타입 추론 (TypeScript 친화적)
+ */
+
+import { ref, computed, onMounted } from "vue";
+import { useAuthStore } from "@/stores/auth";
+import InputField from "@/components/common/InputField.vue";
+import Button from "@/components/common/Button.vue";
+import Checkbox from "@/components/common/Checkbox.vue";
+
+/* ==================== 인증 스토어 ==================== */
+
+/**
+ * Pinia 스토어 가져오기
+ *
+ * useAuthStore()를 호출하여 인증 스토어 사용
+ * 이제 authStore.login(), authStore.user 등 사용 가능
+ */
+const authStore = useAuthStore();
+
+/* ==================== Refs (리액티브 상태) ==================== */
+
+/**
+ * ref()로 감싼 변수들
+ *
+ * Vue2:
+ * data() {
+ *   return { email: '', password: '' }
+ * }
+ *
+ * Vue3:
+ * const email = ref('')
+ *
+ * 템플릿에서: {{ email }} (자동 unwrap)
+ * 스크립트에서: email.value
+ */
+
+// 입력 필드 값
+const email = ref("");
+const password = ref("");
+
+// UI 상태
+const isLoading = ref(false);
+const rememberEmail = ref(false);
+
+// 에러 처리
+const error = ref(null);
+const formErrors = ref({ email: null, password: null });
+
+/* ==================== Computed (파생 데이터) ==================== */
+
+/**
+ * computed()로 정의된 파생 데이터
+ *
+ * 의존하는 값(email, password)이 변경되면 자동으로 재계산됨
+ *
+ * Vue2:
+ * computed: { isFormValid() { ... } }
+ *
+ * Vue3:
+ * const isFormValid = computed(() => { ... })
+ */
+
+/**
+ * 폼 유효성 검사
+ *
+ * 이메일과 비밀번호가 모두 입력되었으면 true
+ */
+const isFormValid = computed(() => {
+  return email.value.trim() !== "" && password.value.trim() !== "";
+});
+
+/* ==================== 메서드 (함수) ==================== */
+
+/**
+ * 폼 검증
+ *
+ * @returns {boolean} - 유효한지 여부
+ */
+function validateForm() {
+  // 에러 초기화
+  formErrors.value = { email: null, password: null };
+  error.value = null;
+
+  // 이메일 검증
+  if (!email.value.trim()) {
+    formErrors.value.email = "이메일을 입력해주세요.";
+    return false;
+  }
+
+  // 이메일 형식 검증 (간단한 정규식)
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email.value)) {
+    formErrors.value.email = "올바른 이메일 형식이 아닙니다.";
+    return false;
+  }
+
+  // 비밀번호 검증
+  if (!password.value.trim()) {
+    formErrors.value.password = "비밀번호를 입력해주세요.";
+    return false;
+  }
+
+  if (password.value.length < 6) {
+    formErrors.value.password = "비밀번호는 6자 이상이어야 합니다.";
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * 로그인 처리
+ *
+ * async/await를 사용하여 비동기 처리
+ * 로딩 중이면 중복 제출 방지
+ */
+async function handleLogin() {
+  // 이미 로딩 중이면 중복 제출 방지
+  if (isLoading.value) return;
+
+  // 폼 검증
+  if (!validateForm()) {
+    return;
+  }
+
+  // 로딩 시작
+  isLoading.value = true;
+  error.value = null;
+
+  try {
+    /**
+     * 인증 스토어의 login() 메서드 호출
+     *
+     * 성공하면 true, 실패하면 false 반환
+     */
+    const success = await authStore.login({
+      email: email.value.trim(),
+      password: password.value,
+      rememberEmail: rememberEmail.value,
+    });
+
+    if (success) {
+      console.log("✅ 로그인 성공");
+
+      /**
+       * 추후 라우터 설정 후:
+       * router.push('/dashboard')
+       *
+       * 현재는 alert로 확인
+       */
+      alert(`환영합니다, ${authStore.userName}님!`);
+    } else {
+      // 스토어에서 설정한 에러 메시지 표시
+      error.value = authStore.error || "로그인 실패";
+    }
+  } catch (err) {
+    error.value = err.message || "로그인 중 오류가 발생했습니다.";
+    console.error("로그인 에러:", err);
+  } finally {
+    // 로딩 종료
+    isLoading.value = false;
+  }
+}
+
+/**
+ * 비밀번호 찾기 버튼 클릭
+ *
+ * 추후: /password-reset 페이지로 이동
+ */
+function handleForgotPassword() {
+  console.log("비밀번호 찾기 페이지로 이동");
+  // router.push('/password-reset')
+}
+
+/**
+ * 계정 생성 버튼 클릭
+ *
+ * 추후: /signup 페이지로 이동
+ */
+function handleSignup() {
+  console.log("계정 생성 페이지로 이동");
+  // router.push('/signup')
+}
+
+/* ==================== 라이프사이클 훅 ==================== */
+
+/**
+ * onMounted: 컴포넌트가 DOM에 마운트될 때 실행
+ *
+ * Vue2:
+ * mounted() { ... }
+ *
+ * Vue3:
+ * onMounted(() => { ... })
+ */
+onMounted(() => {
+  // 저장된 이메일 로드
+  authStore.loadSavedEmail();
+
+  // 저장된 이메일이 있으면 입력 필드에 채우기
+  if (authStore.savedEmail) {
+    email.value = authStore.savedEmail;
+    rememberEmail.value = true;
+  }
+
+  console.log("✅ 로그인 페이지 로드 완료");
+});
+</script>
+
+<style scoped lang="scss">
+/**
+ * scoped: 이 스타일은 현재 컴포넌트에만 적용
+ * 
+ * lang="scss": SCSS 문법 사용
+ */
+
+@import "@/assets/styles/variables.scss";
+@import "@/assets/styles/animations.scss";
+
+/* ==================== 전체 페이지 ==================== */
+
+.login-page {
+  /* 
+    전체 화면을 차지하는 레이아웃
+    
+    flexbox로 왼쪽/오른쪽 섹션을 배치
+  */
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  background-color: $bg-primary;
+
+  /* 
+    반응형: 작은 화면에서는 세로 배치
+  */
+  @media (max-width: $breakpoint-phone) {
+    flex-direction: column;
+  }
+}
+
+/* ==================== 왼쪽: 로그인 폼 섹션 ==================== */
+
+.login-form-section {
+  /* 
+    왼쪽 섹션: 50% 너비
+    
+    중앙 정렬로 폼이 화면 중앙에 보임
+  */
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-8;
+  background-color: $white;
+
+  /* 
+    반응형: 작은 화면에서는 전체 너비
+  */
+  @media (max-width: $breakpoint-phone) {
+    width: 100%;
+    padding: $spacing-6;
+  }
+}
+
+.login-container {
+  /* 
+    로그인 폼을 감싸는 컨테이너
+    
+    최대 너비 설정으로 폼이 너무 넓어지지 않음
+  */
+  width: 100%;
+  max-width: 400px;
+
+  /* 
+    위에서 아래로 내려오는 애니메이션
+  */
+  animation: slideUp 0.5s ease-out;
+}
+
+/* ==================== 헤더 (제목, 설명) ==================== */
+
+.login-header {
+  margin-bottom: $spacing-8;
+  text-align: center;
+}
+
+.login-title {
+  /* 
+    "로그인" 제목
+    
+    크기, 색상, 마진 설정
+  */
+  font-size: $font-size-3xl;
+  font-weight: $font-weight-bold;
+  color: $text-primary;
+  margin-bottom: $spacing-3;
+
+  /* 
+    페이드인 애니메이션
+  */
+  animation: fadeInDown 0.6s ease-out 0.2s both;
+}
+
+.login-subtitle {
+  /* 
+    설명 텍스트
+    
+    흐린 색상으로 보조 정보임을 표시
+  */
+  font-size: $font-size-base;
+  color: $text-secondary;
+  line-height: 1.6;
+
+  animation: fadeInUp 0.6s ease-out 0.3s both;
+}
+
+/* ==================== 폼 ==================== */
+
+.login-form {
+  /* 
+    입력 필드들을 수직으로 배치
+  */
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-6;
+  margin-bottom: $spacing-6;
+}
+
+.form-group {
+  /* 
+    입력 필드 그룹
+    
+    에러 메시지 공간 예약 (아래)
+  */
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+  margin-bottom: $spacing-xs;
+
+  /* 
+    지연 애니메이션: 차례대로 나타남
+  */
+  animation: slideUp 0.5s ease-out 0.4s both;
+}
+
+/* ==================== 버튼 ==================== */
+
+/* 
+  Button 컴포넌트는 별도 스타일 파일에서 관리
+  여기서는 버튼의 마진만 설정
+*/
+
+/* ==================== 에러 메시지 (전체 폼) ==================== */
+
+.form-error {
+  /* 
+    전체 폼의 에러 메시지
+    
+    개별 입력 필드 에러와는 다름
+    (예: 서버에서 반환한 에러)
+  */
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  padding: $spacing-3;
+  background-color: rgba($danger-color, 0.1);
+  border-left: 4px solid $danger-color;
+  border-radius: $border-radius-base;
+  color: $danger-color;
+  font-size: $font-size-sm;
+
+  /* 
+    슬라이드인 애니메이션
+  */
+  animation: slideDown 0.3s ease-out;
+}
+
+.error-icon {
+  flex-shrink: 0;
+  font-size: 1.2rem;
+}
+
+.error-text {
+  /* 에러 텍스트 */
+}
+
+/* ==================== 체크박스: 아이디 저장 ==================== */
+
+.remember-email-checkbox {
+  /* 
+    체크박스 마진 조정
+  */
+  margin-top: $spacing-xs;
+  margin-bottom: $spacing-4;
+
+  animation: fadeIn 0.5s ease-out 0.5s both;
+}
+
+/* ==================== 하단 링크 ==================== */
+
+.login-footer {
+  /* 
+    "비밀번호 찾기 | 계정 생성"
+    
+    중앙 정렬, 링크 스타일
+  */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-xs;
+  text-align: center;
+  font-size: $font-size-sm;
+  color: $text-secondary;
+
+  animation: fadeIn 0.5s ease-out 0.6s both;
+}
+
+.link-button {
+  /* 
+    링크 스타일 버튼
+    
+    배경 없이 텍스트만 표시
+  */
+  background: none;
+  border: none;
+  color: $primary-color;
+  cursor: pointer;
+  font-size: $font-size-sm;
+  text-decoration: none;
+  transition: all $transition-base;
+  padding: 0;
+
+  /* 
+    호버 효과: 언더라인 + 색상 변경
+  */
+  &:hover {
+    color: $primary-dark-color;
+    text-decoration: underline;
+  }
+
+  /* 
+    포커스 효과 (접근성)
+  */
+  &:focus {
+    outline: 2px solid $primary-color;
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+}
+
+.divider {
+  /* 
+    링크 구분선 "|"
+  */
+  color: $gray-300;
+}
+
+/* ==================== 오른쪽: 배경 그래픽 섹션 ==================== */
+
+.login-graphic-section {
+  /* 
+    오른쪽 섹션: 50% 너비
+    
+    배경 이미지/그래픽을 표시
+  */
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-8;
+  overflow: hidden;
+
+  /* 
+    반응형: 작은 화면에서는 숨김
+  */
+  @media (max-width: $breakpoint-phone) {
+    display: none;
+  }
+}
+
+.graphic-background {
+  /* 
+    배경 그래픽 컨테이너
+    
+    상대 위치 지정: 절대 위치의 자식 요소들 배치
+  */
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  /* 
+    그라디언트 배경
+    
+    분홍색/흰색으로 부드럽게 전환
+  */
+  background: linear-gradient(
+    135deg,
+    rgba(255, 200, 220, 0.3) 0%,
+    rgba(230, 220, 250, 0.2) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+
+  /* 
+    border-radius: 오른쪽 모서리만 둥글게
+  */
+  border-radius: 0 40px 40px 0;
+}
+
+/* ==================== 중앙 원형 요소 ==================== */
+
+.center-circle {
+  /* 
+    중앙에 배치된 큰 원
+    
+    절대 위치로 중앙 정렬
+  */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 200px;
+  height: 200px;
+
+  /* 
+    투명한 테두리로 원을 그림
+  */
+  border: 3px solid rgba($primary-color, 0.2);
+  border-radius: 50%;
+
+  /* 
+    회전 애니메이션
+  */
+  animation: spin 20s linear infinite;
+
+  /* 
+    자식 요소: 더 작은 내부 원
+  */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circle-inner {
+  /* 
+    중앙 원 내부의 작은 원
+  */
+  width: 80px;
+  height: 80px;
+  background-color: rgba($primary-color, 0.1);
+  border-radius: 50%;
+
+  /* 
+    펄스 애니메이션
+  */
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* ==================== 움직이는 점들 ==================== */
+
+.floating-dots {
+  /* 
+    여러 점을 배치할 컨테이너
+    
+    절대 위치로 배경 전체에 배치
+  */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.dot {
+  /* 
+    각 점의 기본 스타일
+  */
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background-color: $primary-color;
+  border-radius: 50%;
+  opacity: 0.6;
+
+  /* 
+    떠다니는 애니메이션
+  */
+  animation: float 6s ease-in-out infinite;
+}
+
+/* 
+  각 점마다 다른 위치와 지연 시간
+  이렇게 하면 자연스러운 움직임 표현
+*/
+
+.dot-1 {
+  top: 10%;
+  left: 20%;
+  animation-delay: 0s;
+}
+
+.dot-2 {
+  top: 20%;
+  right: 15%;
+  width: 10px;
+  height: 10px;
+  animation-delay: 0.5s;
+}
+
+.dot-3 {
+  top: 50%;
+  left: 10%;
+  width: 8px;
+  height: 8px;
+  animation-delay: 1s;
+}
+
+.dot-4 {
+  bottom: 30%;
+  right: 20%;
+  animation-delay: 1.5s;
+}
+
+.dot-5 {
+  bottom: 20%;
+  left: 25%;
+  width: 10px;
+  height: 10px;
+  animation-delay: 2s;
+}
+
+.dot-6 {
+  top: 70%;
+  right: 10%;
+  width: 8px;
+  height: 8px;
+  animation-delay: 2.5s;
+}
+
+.dot-7 {
+  top: 35%;
+  right: 30%;
+  animation-delay: 3s;
+}
+
+/* ==================== "AI Works" 텍스트 ==================== */
+
+.graphic-text {
+  /* 
+    배경 텍스트
+    
+    매우 투명하게 표시 (배경처럼)
+  */
+  position: absolute;
+  bottom: 40px;
+  right: 40px;
+
+  font-size: 4rem;
+  font-weight: $font-weight-bold;
+  color: rgba($primary-color, 0.08);
+  letter-spacing: 8px;
+
+  /* 
+    사용자 선택 방지
+  */
+  user-select: none;
+  pointer-events: none;
+
+  /* 
+    부드러운 페이드인
+  */
+  animation: fadeIn 1s ease-out 0.5s both;
+}
+
+/* ==================== 애니메이션 정의 (로컬) ==================== */
+
+/**
+ * float 애니메이션
+ * 
+ * 점들이 부드럽게 떠다니는 효과
+ * Y축으로 위아래로 움직임
+ */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+</style>
