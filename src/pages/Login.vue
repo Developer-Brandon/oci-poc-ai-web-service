@@ -635,6 +635,7 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  padding: 25px;
 
   /* 
     반응형: 작은 화면에서는 숨김
@@ -650,31 +651,13 @@ onMounted(() => {
 }
 
 .graphic-background {
-  /* 
-    배경 그래픽 컨테이너
-    
-    상대 위치 지정: 절대 위치의 자식 요소들 배치
-  */
-  position: relative;
   width: 100%;
   height: 100%;
-
-  /* 
-    그라디언트 배경
-    
-    분홍색/흰색으로 부드럽게 전환
-  */
-  background: linear-gradient(
-    135deg,
-    rgba(255, 200, 220, 0.3) 0%,
-    rgba(230, 220, 250, 0.2) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-
-  /* 
-    border-radius: 오른쪽 모서리만 둥글게
-  */
-  border-radius: 0 40px 40px 0;
+  background-image: url("@/assets/images/login/login_works_banner.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 25px;
 }
 
 /* ==================== 중앙 원형 요소 ==================== */
