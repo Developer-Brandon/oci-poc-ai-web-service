@@ -117,17 +117,8 @@
           </div>
         </div>
       </div>
+      <!-- 배경 그라디언트 + 애니메이션 요소들 -->
       <div class="login-graphic-section">
-        <!-- 
-        배경 그라디언트 + 애니메이션 요소들
-        
-        PDF 디자인:
-        - 분홍색/흰색 그라디언트 배경
-        - 중앙에 원(circle)
-        - 여러 개의 움직이는 점(dots)
-        - "AI Works" 텍스트
-      -->
-
         <!-- 배경 색상 컨테이너 -->
         <div class="graphic-background"></div>
       </div>
@@ -566,7 +557,7 @@ onMounted(() => {
     체크박스 마진 조정
   */
   margin-top: $spacing-xs;
-  margin-bottom: $spacing-5;
+  margin-bottom: $spacing-10;
   margin-left: $spacing-1;
 
   animation: fadeIn 0.5s ease-out 0.5s both;
