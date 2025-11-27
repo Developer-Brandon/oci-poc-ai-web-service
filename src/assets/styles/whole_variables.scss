@@ -16,12 +16,12 @@
  */
 
 /* ==================== 색상 정의 ==================== */
-@forward "./variables/color-variables";
-@forward "./variables/border-variables";
-@forward "./variables/font-variables";
-@forward "./variables/media-query-breakpoint-variables";
-@forward "./variables/shadow-variables";
-@forward "./variables/spacing-variables";
-@forward "./variables/transition-variables";
-@forward "./variables/z-index-variables";
-@forward "./variables/gradient-variables";
+@forward "./variables/_color-variables";
+@forward "./variables/_border-variables";
+@forward "./variables/_font-variables";
+@forward "./variables/_media-query-breakpoint-variables";
+@forward "./variables/_shadow-variables";
+@forward "./variables/_spacing-variables";
+@forward "./variables/_transition-variables";
+@forward "./variables/_z-index-variables";
+@forward "./variables/_gradient-variables";

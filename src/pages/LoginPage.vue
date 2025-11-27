@@ -1,5 +1,4 @@
 <!--
-  pages/Login.vue
   로그인 페이지 메인 컴포넌트
 -->
 <template>
@@ -9,20 +8,14 @@
   <div class="login-page">
     <div class="login-page__inner">
       <div class="login-form-section">
-        <!-- 폼 컨테이너 -->
         <div class="login-container">
           <div class="login-header">
             <h1 class="login-title">로그인</h1>
             <p class="login-subtitle">OCI AI Works 에 오신것을 환영합니다</p>
           </div>
-
-          <!-- 
-          로그인 폼
-          @submit.prevent: 기본 폼 제출 동작 방지 (Vue에서 처리)
-        -->
           <form class="login-form" @submit.prevent="handleLogin">
             <!-- ========== 이메일 입력 필드 ========== -->
-            <div class="form-group email-group">
+            <div class="form-group email-group" @keydown.enter="handleLogin">
               <!-- 
               InputField 컴포넌트 사용
               
@@ -44,18 +37,8 @@
                 ✉️
               </InputField>
             </div>
-
             <!-- ========== 비밀번호 입력 필드 ========== -->
             <div class="form-group password-group" @keydown.enter="handleLogin">
-              <!-- 
-              InputField 컴포넌트
-              
-              type="password": 비밀번호 필드
-              - 입력값이 점(●)으로 표시됨
-              - 우측에 눈 아이콘으로 표시/숨기 토글
-              
-              showPassword 상태로 실제 비밀번호 표시 가능
-            -->
               <InputField
                 v-model="password"
                 type="password"
@@ -67,13 +50,11 @@
                 🔐
               </InputField>
             </div>
-
             <!-- ========== 에러 메시지 (전체 폼) ========== -->
             <div v-if="error" class="form-error">
               <span class="error-icon">⚠️</span>
               <span class="error-text">{{ error }}</span>
             </div>
-
             <!-- ========== 체크박스: 아이디 저장 ========== -->
             <Checkbox
               v-model="rememberEmail"
@@ -81,7 +62,6 @@
               class="remember-email-checkbox"
             />
           </form>
-
           <!-- ========== 로그인 버튼 ========== -->
           <Button
             class="login-button"
@@ -96,9 +76,7 @@
           </Button>
           <!-- 
           하단 링크
-          
           "비밀번호 찾기" | "계정 생성"
-          
           현재는 v-on:click 미구현 (추후 라우터로 페이지 이동)
         -->
           <div class="login-footer">
@@ -407,6 +385,7 @@ onMounted(() => {
       width: 100%;
       height: auto;
       flex-direction: column;
+      padding: $spacing-2 !important;
     }
   }
 }
@@ -445,6 +424,9 @@ onMounted(() => {
     위에서 아래로 내려오는 애니메이션
   */
   animation: slideUp 0.5s ease-out;
+  /* 
+    반응형: 작은 화면에서는 전체 너비
+  */
 }
 
 /* ==================== 헤더 (제목, 설명) ==================== */

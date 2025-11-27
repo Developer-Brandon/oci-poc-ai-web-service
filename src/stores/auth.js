@@ -74,7 +74,7 @@ export const useAuthStore = defineStore("auth", () => {
 
   /**
    * 사용자 이름 (로그인 후 그리팅)
-   * "안녕하세요, 이서빈님!"
+   * "안녕하세요, 이도겸님!"
    */
   const userName = computed(() => user.value?.name || "");
 

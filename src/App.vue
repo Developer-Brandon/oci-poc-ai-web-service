@@ -4,7 +4,7 @@ import LoginPage from "./pages/LoginPage.vue";
 
 <template>
   <div id="app">
-    <div class="app-container"></div>
     <LoginPage />
+    <!-- <CommonModal v-if="uiStore.isCommonModalOpen" /> -->
   </div>
 </template>

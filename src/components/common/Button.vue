@@ -53,7 +53,7 @@
       로딩 중이면 loading 슬롯, 아니면 default 슬롯 사용
     -->
     <span v-if="loading" class="btn-loading-text">
-      <slot name="loading">처리 중...</slot>
+      <slot name="loading">로그인 중...</slot>
     </span>
     <span v-else>
       <slot></slot>

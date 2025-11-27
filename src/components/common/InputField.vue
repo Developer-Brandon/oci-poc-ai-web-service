@@ -77,8 +77,7 @@
         @click="showPassword = !showPassword"
         :title="showPassword ? '비밀번호 숨기' : '비밀번호 표시'"
       >
-        <!-- 눈 아이콘 (간단한 텍스트로 표현) -->
-        <span v-if="showPassword">👁️</span>
+        <span v-if="showPassword">🔓</span>
         <span v-else>🔒</span>
       </button>
 
