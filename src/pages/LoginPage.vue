@@ -122,6 +122,7 @@ import Button from "@/components/common/Button.vue";
 import Checkbox from "@/components/common/Checkbox.vue";
 import CommonIcon from "@/components/icon/CommonIcon.vue";
 import PrimaryPopup from "../components/modals/PrimaryPopup.vue";
+import { useRouter } from "vue-router";
 
 const emailIconPath = new URL(
   "@/assets/images/login/icon/email.png",
@@ -131,7 +132,7 @@ const passwordIconPath = new URL(
   "@/assets/images/login/icon/key.png",
   import.meta.url
 ).href;
-
+const router = useRouter();
 /* ==================== 인증 스토어 ==================== */
 
 /**
@@ -327,10 +328,12 @@ async function handleLogin() {
 
     if (success) {
       console.log("✅ 로그인 성공");
-      showPopupMessage("로그인 성공", `환영합니다, ${authStore.userName}님!`);
+      // showPopupMessage("로그인 성공", `환영합니다, ${authStore.userName}님!`);
+      router.push("/main");
     }
   } catch (err) {
-    error.value = err.message || "로그인 중 오류가 발생했습니다.";
+    // error.value = err.message || "로그인 중 오류가 발생했습니다.";
+    showPopupMessage("ERROR", err.message || "로그인 중 오류가 발생했습니다.");
     console.error("로그인 에러:", err);
   } finally {
     isLoading.value = false;
