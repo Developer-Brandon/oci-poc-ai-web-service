@@ -14,7 +14,7 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 import App from "./App.vue";
-// import router from "./router";
+import router from "./router";
 
 /**
  * 전역 스타일 import
@@ -60,7 +60,7 @@ const app = createApp(App);
  * - 모듈화되고 트리쉐이킹 가능
  */
 app.use(createPinia());
-// app.use(router);
+app.use(router);
 /* ==================== 전역 프로퍼티 설정 ==================== */
 
 /**
@@ -96,9 +96,7 @@ app.config.globalProperties.$appName = "OCI AI Works";
 app.mount("#app");
 
 /**
- * 마운트 후 확인 (개발 환경)
- *
- * Vite의 import.meta.env.DEV를 사용하여 개발 환경에서만 로그 출력
+ * 마운트 후 확인 (개발, 운영 환경)
  */
 if (import.meta.env.DEV) {
   console.log("✅ [개발] Vue3 애플리케이션 초기화 완료");

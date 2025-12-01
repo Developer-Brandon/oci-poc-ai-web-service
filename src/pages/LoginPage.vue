@@ -250,57 +250,75 @@ function validateForm() {
 
 // 로그인 처리 - async/await를 사용하여 비동기 처리 , 로딩 중이면 중복 제출 방지
 async function handleLogin() {
-  // 이미 로딩 중이면 중복 제출 방지
   if (isLoading.value) return;
 
   // 폼 검증
   if (!validateForm()) return;
 
-  // 로딩 시작
   isLoading.value = true;
   error.value = null;
 
   try {
-    // 1. localStorage에서 admin 계정 확인
-    const adminAccount = JSON.parse(
-      localStorage.getItem("admin_account") || "null"
+    // 1. localStorage에서 admin 계정 안전하게 가져오기
+    let adminAccountRaw = localStorage.getItem("admin_account");
+
+    console.log("📌 raw localStorage:", adminAccountRaw);
+
+    // JSON 파싱 (에러 대비)
+    let adminAccount = null;
+    try {
+      adminAccount = JSON.parse(adminAccountRaw);
+    } catch (e) {
+      console.warn("⚠ JSON.parse 실패 → adminAccount를 null로 처리");
+      adminAccount = null;
+    }
+
+    // 딥카피 출력 (DevTools 지연평가 방지)
+    console.log(
+      "🔧 Admin 계정이 로그인 되었습니다:",
+      JSON.parse(JSON.stringify(adminAccount))
     );
 
-    console.log("🔧 Admin 계정이 로그인 되었습니다:", adminAccount);
+    // 1-(1). adminAccount 검증 (객체인지 체크)
+    const isValidAdmin =
+      adminAccount &&
+      typeof adminAccount === "object" &&
+      typeof adminAccount.id === "string" &&
+      typeof adminAccount.pw === "string";
 
-    // 1-(1). 만약, localStorage에 계정이 없다면?
-    if (!adminAccount) {
-      // 팝업 표시
+    if (!isValidAdmin) {
       showPopupMessage(
         "관리자 계정이 생성되지 않았습니다.",
         "현재는 관리자 계정만 접속 가능합니다."
       );
-      isLoading.value = false; // 로딩 종료
-      return; // 함수 종료
+      isLoading.value = false;
+      return;
     }
-    // 1-(2). 있으면. 2번으로 로직 속행
 
     // 2. validation
-    // 2-(1). email
-    // aionu@kt.com이 localStorage에 저장한 id와 같지 않다면?
-    if (email.value.trim() !== adminAccount.id) {
+    // 2-(1). 아이디 체크
+    const matchingEmail = email.value.trim().match(/^([^@]+)@/);
+    const idOnly = matchingEmail[1];
+    if (idOnly !== adminAccount.id) {
       showPopupMessage(
         "잘못된 아이디입니다.",
         "현재는 관리자 계정만 접속 가능합니다."
       );
-      isLoading.value = false; // 로딩 종료
-      return; // 함수 종료
+      isLoading.value = false;
+      return;
     }
-    // 2-(2). password
+
+    // 2-(2). 패스워드 체크
     if (password.value.trim() !== adminAccount.pw) {
       showPopupMessage(
         "잘못된 비밀번호입니다.",
         "비밀번호가 일치하지 않습니다."
       );
-      isLoading.value = false; // 로딩 종료
-      return; // 함수 종료
+      isLoading.value = false;
+      return;
     }
-    // 2-(3). try login
+
+    // 3. login 진행
     const success = await authStore.login({
       email: email.value.trim(),
       password: password.value.trim(),
@@ -309,13 +327,6 @@ async function handleLogin() {
 
     if (success) {
       console.log("✅ 로그인 성공");
-
-      /**
-       * ⭐ TODO: 라우터 설정 후 MainPage로 이동
-       * router.push('/main')
-       *
-       * 현재는 팝업으로 확인
-       */
       showPopupMessage("로그인 성공", `환영합니다, ${authStore.userName}님!`);
     }
   } catch (err) {
@@ -324,37 +335,6 @@ async function handleLogin() {
   } finally {
     isLoading.value = false;
   }
-
-  // 추후 api 연동 시 사용 예정
-  // try {
-  //   /**
-  //    * 인증 스토어의 login() 메서드 호출
-  //    * 성공하면 true, 실패하면 false 반환
-  //    */
-  //   const success = await authStore.login({
-  //     email: email.value.trim(),
-  //     password: password.value,
-  //     rememberEmail: rememberEmail.value,
-  //   });
-
-  //   if (success) {
-  //     console.log("✅ 로그인 성공");
-
-  //     /**
-  //      * 추후 라우터 설정 후 main page로 이동: router.push('/main')
-  //      * 현재는 그냥 console로만 찍고 바로 routing하도록
-  //      */
-  //   } else {
-  //     // 스토어에서 설정한 에러 메시지 표시
-  //     error.value = authStore.error || "로그인 실패";
-  //   }
-  // } catch (err) {
-  //   error.value = err.message || "로그인 중 오류가 발생했습니다.";
-  //   console.error("로그인 에러:", err);
-  // } finally {
-  //   // 로딩 종료
-  //   isLoading.value = false;
-  // }
 }
 
 /**
