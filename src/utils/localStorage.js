@@ -22,8 +22,6 @@
  * removeData('messages')
  */
 
-import { STORAGE_KEYS } from "./constants";
-
 /**
  * LocalStorage 저장 (안전하게)
  *

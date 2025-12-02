@@ -100,7 +100,7 @@
 
     <!-- 에러 메시지 -->
     <div v-if="error" class="error-message">
-      <span class="error-icon">⚠️</span>
+      <!-- <span class="error-icon">⚠️</span> -->
       {{ error }}
     </div>
   </div>

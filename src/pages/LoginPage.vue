@@ -121,8 +121,9 @@ import InputField from "@/components/common/InputField.vue";
 import Button from "@/components/common/Button.vue";
 import Checkbox from "@/components/common/Checkbox.vue";
 import CommonIcon from "@/components/icon/CommonIcon.vue";
-import PrimaryPopup from "../components/modals/PrimaryPopup.vue";
+import PrimaryPopup from "@/components/modals/PrimaryPopup.vue";
 import { useRouter } from "vue-router";
+import { STORAGE_KEYS } from "@/utils/constants";
 
 const emailIconPath = new URL(
   "@/assets/images/login/icon/email.png",
@@ -184,7 +185,6 @@ const popupConfig = ref({
 
 /**
  * computed()로 정의된 파생 데이터
- *
  * 의존하는 값(email, password)이 변경되면 자동으로 재계산됨
  *
  * Vue2:
@@ -196,7 +196,6 @@ const popupConfig = ref({
 
 /**
  * 폼 유효성 검사
- *
  * 이메일과 비밀번호가 모두 입력되었으면 true
  */
 const isFormValid = computed(() => {
@@ -246,6 +245,9 @@ function validateForm() {
     return false;
   }
 
+  if (!isFormValid()) {
+  }
+
   return true;
 }
 
@@ -261,7 +263,7 @@ async function handleLogin() {
 
   try {
     // 1. localStorage에서 admin 계정 안전하게 가져오기
-    let adminAccountRaw = localStorage.getItem("admin_account");
+    let adminAccountRaw = localStorage.getItem(STORAGE_KEYS.ADMIN_ACCOUNT);
 
     console.log("📌 raw localStorage:", adminAccountRaw);
 

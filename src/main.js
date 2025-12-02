@@ -30,15 +30,9 @@ import { router } from "@/router";
  */
 import "@/assets/styles/whole_variables.scss";
 import "@/assets/styles/global/whole_globals.scss";
+import { STORAGE_KEYS } from "./utils/constants";
 
 /* ==================== Vue 애플리케이션 초기화 ==================== */
-
-/**
- * createApp(App)
- *
- * Vue3에서는 createApp() 함수로 애플리케이션 인스턴스를 생성합니다.
- * App.vue를 루트 컴포넌트로 설정합니다.
- */
 const app = createApp(App);
 
 /* ==================== Pinia 스토어 설정 ==================== */
@@ -113,7 +107,7 @@ if (import.meta.env.PROD) {
 }
 
 if (import.meta.env.DEV || import.meta.env.PROD) {
-  const existingAdmin = localStorage.getItem("admin_account");
+  const existingAdmin = localStorage.getItem(STORAGE_KEYS.ADMIN_ACCOUNT);
 
   if (!existingAdmin) {
     const adminAccount = {
@@ -121,7 +115,10 @@ if (import.meta.env.DEV || import.meta.env.PROD) {
       pw: "New1234!",
     };
 
-    localStorage.setItem("admin_account", JSON.stringify(adminAccount));
+    localStorage.setItem(
+      STORAGE_KEYS.ADMIN_ACCOUNT,
+      JSON.stringify(adminAccount)
+    );
     console.log("🔧 Admin 계정이 자동으로 생성되었습니다:", adminAccount);
   } else {
     console.log("✅ Admin 계정이 이미 존재합니다.");

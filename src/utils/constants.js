@@ -15,7 +15,6 @@
  */
 
 /* ==================== 1.API 설정 및 API 엔드포인트 ==================== */
-
 /**
  * /**
  * 1-(1).API 기본 주소
@@ -35,22 +34,24 @@ export const API_BASE_URL =
  * - /api/agents - AI Agent 목록
  * - /api/agents/{id} - 특정 Agent 정보
  */
+const PREFIX = "/api";
+
 export const API_ENDPOINTS = {
+  PREFIX,
   // 채팅
-  CHAT_SEND: "/api/chat/send",
-  CHAT_HISTORY: "/api/chat/history",
+  CHAT_SEND: `${PREFIX}/chat/send`,
+  CHAT_HISTORY: `${PREFIX}/chat/history`,
   // AI 에이전트
-  AGENTS: "/api/agents",
-  AGENT_DETAIL: "/api/agents/:id",
-  // 사용자 (인증은 SSO로 처리될 예정),
-  USER_PROFILE: "/api/user/profile",
-  // 이미지/콘텐츠(서버에서 제공)
-  IMAGES: "/api/images",
-  CONTENT: "/api/content",
+  AGENTS: `${PREFIX}/agents`,
+  AGENT_DETAIL: `${PREFIX}/agents/:id`,
+  // 사용자
+  USER_PROFILE: `${PREFIX}/user/profile`,
+  // 이미지 / 콘텐츠
+  IMAGES: `${PREFIX}/images`,
+  CONTENT: `${PREFIX}/content`,
 };
 
 /* ==================== 2.AI Agent 타입 ==================== */
-
 /**
  * 2-(1).지원하는 AI Agent 모델들
  */
@@ -72,10 +73,7 @@ export const AGENT_DESCRIPTIONS = {
 };
 
 /* ==================== 3.메시지 타입 ==================== */
-
-/**
- * 3-(1).채팅 메시지 타입
- */
+//* 3-(1).채팅 메시지 타입
 export const MESSAGE_TYPES = {
   USER: "user", // 사용자 메시지
   ASSISTANT: "assistant", // AI 응답
@@ -83,10 +81,7 @@ export const MESSAGE_TYPES = {
 };
 
 /* ==================== 4.상태 메시지 ==================== */
-
-/**
- * 4-(1).사용자에게 보여줄 메시지들
- */
+// 4-(1).사용자에게 보여줄 메시지들
 export const MESSAGES = {
   LOADING: "로딩 중입니다...",
   ERROR_NETWORK: "네트워크 연결을 확인해주세요.",
@@ -97,25 +92,20 @@ export const MESSAGES = {
 };
 
 /* ==================== 5.브라우저 저장소 키 ==================== */
-
-/**
- * 5-(1).LocalStorage에서 사용되는 키들
- */
+// 5-(1).LocalStorage에서 사용되는 키들
 export const STORAGE_KEYS = {
+  // 인증 관련 (로그인 페이지)
+  SAVED_EMAIL: "works_ai_saved_email", // "아이디 저장" 옵션
+  USER_SESSION: "works_ai_user_session", // 로그인 세션 //TODO: 로그인 세션 어떻게 관리되어지는지 확인 필요
+  ADMIN_ACCOUNT: "works_ai_admin_account",
   // 채팅 관련
   CHAT_MESSAGES: "works_ai_chat_messages",
   // 사용자 설정
   USER_PREFERENCES: "works_ai_user_preferences",
-  // 인증 관련 (로그인 페이지)
-  SAVED_EMAIL: "works_ai_saved_email", // "아이디 저장" 옵션
-  USER_SESSION: "works_ai_user_session", // 로그인 세션 //TODO: 로그인 세션 어떻게 관리되어지는지 확인 필요
 };
 
 /* ==================== 6.유효성 검사 ==================== */
-
-/**
- * 6-(1).입력값 검증 규칙
- */
+// 6-(1).입력값 검증 규칙
 export const VALIDATION_RULES = {
   MESSAGE: {
     MIN_LENGTH: 1,
@@ -128,16 +118,12 @@ export const VALIDATION_RULES = {
   PASSWORD: {
     MIN_LENGTH: 8,
     MAX_LENGTH: 100,
-    // 숫자, 대문자, 소문자 포함 필수
-    PATTERN: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
+    PATTERN: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/, // 숫자, 대문자, 소문자 포함 필수
   },
 };
 
 /* ==================== 7.타임아웃 설정 ==================== */
-
-/**
- * 7-(1).다양한 작업의 타임아웃 시간 (밀리초)
- */
+// 7-(1).다양한 작업의 타임아웃 시간 (밀리초)
 export const TIMEOUTS = {
   API_REQUEST: 30000, // API 요청 : 30초
   MESSAGE_DEBOUNCE: 300, // 메세지 입력 디바운스: 300ms
@@ -209,4 +195,6 @@ export const ENV = {
   NODE_ENV: import.meta.env.MODE, // 'development' 또는 'production'
   IS_PRODUCTION: import.meta.env.PROD,
   IS_DEVELOPMENT: import.meta.env.DEV,
+  LOGIN_PAGE_TITLE: "AI Works - 로그인",
+  MAIN_PAGE_TITLE: "AI Works - 메인",
 };
