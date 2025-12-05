@@ -278,7 +278,8 @@ export const useConfigStore = defineStore("config", () => {
    */
   function getMockConfigData() {
     const office = "komsco";
-
+    const privateImageServerUrl =
+      "https://raw.githubusercontent.com/Developer-Brandon/image-temp-repo/refs/heads/main";
     if (office === "oci") {
       return {
         status: 200,
@@ -287,8 +288,7 @@ export const useConfigStore = defineStore("config", () => {
           info: {
             common: {
               office: `${office}`.toUpperCase(),
-              imageServerUrl:
-                "https://raw.githubusercontent.com/Developer-Brandon/image-temp-repo/refs/heads/main",
+              imageServerUrl: `${privateImageServerUrl}`,
               faviconImageUrl: `/${office}/favicon.png`,
               logoImageUrl: `/${office}/logo.png`,
               mainColorHexCode: "#D0021B",
@@ -393,8 +393,7 @@ export const useConfigStore = defineStore("config", () => {
           info: {
             common: {
               office: `${office}`.toUpperCase(),
-              imageServerUrl:
-                "https://raw.githubusercontent.com/Developer-Brandon/image-temp-repo/refs/heads/main",
+              imageServerUrl: `${privateImageServerUrl}`,
               faviconImageUrl: `/${office}/favicon.png`,
               logoImageUrl: `/${office}/logo.png`,
               mainColorHexCode: "#2384C6",
@@ -503,10 +502,10 @@ export const useConfigStore = defineStore("config", () => {
    *
    * 예시:
    * --color-main: #D0021B
-   * --color-main-hover: #FFF3F3
    *
    * 사용법 (SCSS):
-   * .button { background: var(--color-main); }
+   * .button { background: var(--color-main);
+   * }
    */
 
   function applyThemeToDOM() {
