@@ -191,6 +191,19 @@ const office = computed(() => {
   return configStore.office || "KT-DS";
 });
 
+/**
+ * 회사명 (로딩 화면용)
+ * configStore에서 가져오거나 기본값 사용
+ */
+function initializeZoom() {
+  const appElement = document.getElementById("app");
+  if (appElement) {
+    appElement.style.zoom = "90%";
+    console.log("🔍 #app 줌 레벨: 90%");
+  } else {
+    console.warn("⚠️ #app 요소를 찾을 수 없습니다");
+  }
+}
 // ==================== 라이프사이클: 앱 초기화 ====================
 /**
  * 페이지 새로고침 시 동작:
@@ -202,6 +215,8 @@ const office = computed(() => {
 onMounted(async () => {
   console.log("🚀 ============================================");
   console.log("🚀 App.vue 초기화 시작");
+  console.log("🚀 ============================================");
+  // initializeZoom();
   console.log("🚀 ============================================");
   console.log("📡서버 설정 로드 시작...");
   await configStore.fetchConfig("/api/app/info");
@@ -239,13 +254,6 @@ onMounted(async () => {
         id: "aionu",
         pw: "New1234!",
       };
-
-      if (configStore.office === "KOMSCO") {
-        adminAccount = {
-          id: "aionu",
-          pw: "New1234!",
-        };
-      }
 
       // 추후 꺼내서 쓸 수 있게 끔 개발 예정
       // const menUserAccount = {
