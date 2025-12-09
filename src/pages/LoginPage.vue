@@ -132,32 +132,15 @@ const passwordIconPath = new URL(
 ).href;
 const router = useRouter();
 /* ==================== 인증 스토어 ==================== */
-
 /**
  * Pinia 스토어 가져오기
- *
  * useAuthStore()를 호출하여 인증 스토어 사용
  * 이제 authStore.login(), authStore.user 등 사용 가능
  */
 const authStore = useAuthStore();
 const configStore = useConfigStore();
+
 /* ==================== Refs (리액티브 상태) ==================== */
-
-/**
- * ref()로 감싼 변수들
- *
- * Vue2:
- * data() {
- *   return { email: '', password: '' }
- * }
- *
- * Vue3:
- * const email = ref('')
- *
- * 템플릿에서: {{ email }} (자동 unwrap)
- * 스크립트에서: email.value
- */
-
 // 입력 필드 관리 변수
 const email = ref("");
 const password = ref("");

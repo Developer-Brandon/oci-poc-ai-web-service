@@ -29,14 +29,6 @@
 <script setup>
 /**
  * App.vue - 루트 컴포넌트
- *
- * 동작 흐름:
- * 1. onMounted 실행
- *    ├─ configStore.fetchConfig() - 서버 설정 로드
- *    ├─ configStore.updateFavicon() - Favicon 변경
- *    └─ authStore.restoreSession() - 세션 복구
- * 2. computed (currentLayout) - 현재 route의 layout 결정
- * 3. template - 해당 layout 렌더링
  */
 import { computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
@@ -96,6 +88,88 @@ const currentLayout = computed(() => {
 });
 
 /**
+ * Open Graph 이미지 동적 변경
+ *
+ * Open Graph란?
+ * - SNS(카카오톡, 페이스북, 링크드인 등)에서 페이지를 공유할 때 표시되는 이미지
+ * - og:image 메타 태그로 제어됨
+ * - 서버에서 받은 이미지 URL을 동적으로 적용하여 공유 시 브랜드 이미지 표시
+ *
+ * 동작 방식:
+ * 1. configStore에서 opengraphImageUrl 가져오기
+ * 2. <meta property="og:image"> 태그 찾기
+ * 3. content 속성에 이미지 URL 설정
+ * 4. 태그가 없으면 새로 생성
+ *
+ * Vue2 vs Vue3:
+ * - Vue2: this.updateOpengraphImage() 메서드 형식
+ * - Vue3: 함수형 방식으로 직접 호출 (더 간단함)
+ */
+/**
+ * Open Graph 정보 동적 변경 (이미지 + 설명)
+ *
+ * Open Graph란?
+ * - SNS(카카오톡, 페이스북, 링크드인 등)에서 페이지를 공유할 때 표시되는 정보
+ * - og:image: 공유 시 표시될 이미지
+ * - og:description: 공유 시 표시될 설명 텍스트
+ * - 서버에서 받은 데이터를 동적으로 적용하여 브랜드 이미지 유지
+ *
+ * 동작 방식:
+ * 1. configStore에서 opengraphImageUrl, opengraphDescription 가져오기
+ * 2. <meta property="og:image">, <meta property="og:description"> 태그 찾기
+ * 3. content 속성에 값 설정
+ * 4. 태그가 없으면 새로 생성
+ *
+ * Vue2 vs Vue3:
+ * - Vue2: this.updateOpengraphInfo() 메서드 형식
+ * - Vue3: 함수형 방식으로 직접 호출 (더 간단함)
+ */
+function updateOpengraphInfo(opengraphImageUrl, opengraphDescription) {
+  console.log("🌐 Open Graph 정보 업데이트 시작");
+
+  // ==================== og:image 설정 ====================
+  if (opengraphImageUrl) {
+    let ogImageMeta = document.querySelector('meta[property="og:image"]');
+
+    // 메타 태그가 없으면 새로 생성
+    if (!ogImageMeta) {
+      ogImageMeta = document.createElement("meta");
+      ogImageMeta.setAttribute("property", "og:image");
+      document.head.appendChild(ogImageMeta);
+      console.log("✅ og:image 메타 태그 생성됨");
+    }
+
+    // content 속성에 이미지 URL 설정
+    ogImageMeta.setAttribute("content", opengraphImageUrl);
+    console.log("🖼️ Open Graph 이미지 업데이트:", opengraphImageUrl);
+  } else {
+    console.warn("⚠️ opengraphImageUrl이 없습니다");
+  }
+
+  // ==================== og:description 설정 ====================
+  if (opengraphDescription) {
+    let ogDescriptionMeta = document.querySelector(
+      'meta[property="og:description"]'
+    );
+
+    // 메타 태그가 없으면 새로 생성
+    if (!ogDescriptionMeta) {
+      ogDescriptionMeta = document.createElement("meta");
+      ogDescriptionMeta.setAttribute("property", "og:description");
+      document.head.appendChild(ogDescriptionMeta);
+      console.log("✅ og:description 메타 태그 생성됨");
+    }
+
+    // content 속성에 설명 텍스트 설정
+    ogDescriptionMeta.setAttribute("content", opengraphDescription);
+    console.log("📝 Open Graph 설명 업데이트:", opengraphDescription);
+  } else {
+    console.warn("⚠️ opengraphDescription이 없습니다");
+  }
+
+  console.log("✅ Open Graph 정보 업데이트 완료");
+}
+/**
  * Favicon 동적 변경
  */
 function updateFavicon(faviconUrl) {
@@ -119,13 +193,6 @@ const office = computed(() => {
 
 // ==================== 라이프사이클: 앱 초기화 ====================
 /**
- * onMounted: 앱이 처음 마운트될 때 실행
- *
- * 동작:
- * 1. localStorage에서 세션 데이터 복원
- * 2. 인증 상태 복구
- * 3. 라우터가 올바른 페이지로 네비게이션
- *
  * 페이지 새로고침 시 동작:
  * 1. App.vue가 다시 마운트됨
  * 2. onMounted에서 restoreSession() 호출
@@ -136,9 +203,17 @@ onMounted(async () => {
   console.log("🚀 ============================================");
   console.log("🚀 App.vue 초기화 시작");
   console.log("🚀 ============================================");
-  console.log("📡 1️⃣ 서버 설정 로드 시작...");
+  console.log("📡서버 설정 로드 시작...");
   await configStore.fetchConfig("/api/app/info");
-  console.log("✅ 1️⃣ 서버 설정 로드 완료!");
+  console.log("✅서버 설정 로드 완료!");
+  console.log("🚀 ============================================");
+  console.log("📡 Open Graph 이미지 설정 시작...");
+  await updateOpengraphInfo(
+    configStore.opengraphImageUrl,
+    configStore.opengraphDescription
+  );
+  console.log("✅ Open Graph 이미지 로딩 완료!");
+  console.log("📡파비콘 설정 로드 시작...");
   await updateFavicon(configStore.faviconImageUrl);
   console.log("✅ 파비콘 로딩 완료!");
   // ============================================================
@@ -149,6 +224,7 @@ onMounted(async () => {
   console.log("📦 설정 데이터:", configStore.serverConfig);
   console.log("🏢 회사명:", configStore.office);
   console.log("🎨 로고:", configStore.logoImageUrl);
+  console.log("🎨 오픈그래프 이미지 주소:", configStore.opengraphImageUrl);
   console.log("🎨 판넬:", configStore.loginPannelImageUrl);
   console.log("🎨 메인 색상:", configStore.mainColorHexCode);
   console.log("🔒 로그인 상태:", authStore.isLoggedIn);
@@ -192,9 +268,6 @@ onMounted(async () => {
     }
     // }
   } catch (error) {
-    // ============================================================
-    // 에러 처리
-    // ============================================================
     console.error("❌ ============================================");
     console.error("❌ 앱 초기화 실패!");
     console.error("❌ ============================================");
@@ -239,14 +312,9 @@ onMounted(async () => {
   display: flex;
   justify-content: center;
   align-items: center;
-
-  /* 트렌디한 그라디언트 배경 */
   background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-
-  /* 배경 애니메이션 (선택사항) */
   background-size: 200% 200%;
   animation: gradient-shift 3s ease infinite;
-
   z-index: 9999;
 }
 

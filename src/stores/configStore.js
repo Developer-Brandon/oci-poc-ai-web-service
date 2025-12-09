@@ -52,7 +52,6 @@ export const useConfigStore = defineStore("config", () => {
 
   /**
    * 이미지 서버 기본 URL
-   * 예: "https://github.com/Developer-Brandon"
    */
   const imageServerUrl = computed(() => {
     return serverConfig.value?.data?.info?.common?.imageServerUrl || "";
@@ -60,7 +59,6 @@ export const useConfigStore = defineStore("config", () => {
 
   /**
    * Favicon 이미지 전체 URL
-   * imageServerUrl + faviconImageUrl 조합
    */
   const faviconImageUrl = computed(() => {
     const base = imageServerUrl.value;
@@ -75,18 +73,10 @@ export const useConfigStore = defineStore("config", () => {
     return base + path;
   });
 
-  /**
-   * 메인 색상 (HEX)
-   * 예: "#D0021B"
-   */
   const mainColorHexCode = computed(() => {
     return serverConfig.value?.data?.info?.common?.mainColorHexCode || "";
   });
 
-  /**
-   * 메인 Hover 색상 (HEX)
-   * 예: "#FFF3F3"
-   */
   const mainHoverColorHexCode = computed(() => {
     return serverConfig.value?.data?.info?.common?.mainHoverColorHexCode || "";
   });
@@ -98,13 +88,23 @@ export const useConfigStore = defineStore("config", () => {
     );
   });
 
-  /**
-   * 로고 이미지 전체 URL
-   * imageServerUrl + logoImageUrl 조합
-   */
   const logoImageUrl = computed(() => {
     const base = imageServerUrl.value;
     const path = serverConfig.value?.data?.info?.common?.logoImageUrl || "";
+    return base + path;
+  });
+
+  const opengraphImageUrl = computed(() => {
+    const base = imageServerUrl.value;
+    const path =
+      serverConfig.value?.data?.info?.common?.opengraphImageUrl || "";
+    return base + path;
+  });
+
+  const opengraphDescription = computed(() => {
+    const base = imageServerUrl.value;
+    const path =
+      serverConfig.value?.data?.info?.common?.opengraphDescription || "";
     return base + path;
   });
 
@@ -274,13 +274,6 @@ export const useConfigStore = defineStore("config", () => {
 
   /**
    * 임시 Mock 데이터
-   *
-   * TODO: 실제 API 연동 시 제거
-   *
-   * 주의사항:
-   * - JSON에 문법 오류가 있어서 수정함
-   * - aiAgentCards 배열 문법 수정 ([ ] -> [])
-   * - 각 객체 마지막 콤마 제거
    */
   function getMockConfigData() {
     const office = "komsco";
@@ -296,6 +289,8 @@ export const useConfigStore = defineStore("config", () => {
               office: `${office}`.toUpperCase(),
               imageServerUrl: `${privateImageServerUrl}`,
               faviconImageUrl: `/${office}/favicon.png`,
+              opengraphImageUrl: `/${office}/opengraph.png`,
+              opengraphDescription: `OCI의 컴퓨트·스토리지·네트워크·보안 자원을 자동화하고 운영 효율을 극대화하는 클라우드 AI 솔루션입니다.`,
               logoImageUrl: `/${office}/logo.png`,
               mainColorHexCode: "#D0021B",
               mainHoverColorHexCode: "#FFF3F3",
@@ -408,6 +403,8 @@ export const useConfigStore = defineStore("config", () => {
               office: `${office}`.toUpperCase(),
               imageServerUrl: `${privateImageServerUrl}`,
               faviconImageUrl: `/${office}/favicon.png`,
+              opengraphImageUrl: `/${office}/opengraph.png`,
+              opengraphDescription: `조폐공사의 예산·감사·특허·자료 분석 업무를 자동화하고 효율화하는 맞춤형 AI 솔루션입니다.`,
               logoImageUrl: `/${office}/logo.png`,
               mainColorHexCode: "#2384C6",
               mainHoverColorHexCode: "#E6EEF5",
@@ -597,6 +594,8 @@ export const useConfigStore = defineStore("config", () => {
     imageServerUrl,
     faviconImageUrl,
     logoImageUrl,
+    opengraphImageUrl,
+    opengraphDescription,
     mainColorHexCode,
     mainHoverColorHexCode,
     subColorHexCode,
