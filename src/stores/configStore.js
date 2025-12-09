@@ -66,6 +66,9 @@ export const useConfigStore = defineStore("config", () => {
     return base + path;
   });
 
+  /**
+   * 기업고유의 프로필 이미지 URL
+   */
   const defaultProfileImage = computed(() => {
     const base = imageServerUrl.value;
     const path =
@@ -73,14 +76,23 @@ export const useConfigStore = defineStore("config", () => {
     return base + path;
   });
 
+  /**
+   * Main color에대한 hover hex code
+   */
   const mainColorHexCode = computed(() => {
     return serverConfig.value?.data?.info?.common?.mainColorHexCode || "";
   });
 
+  /**
+   * Main color의 hover에 대한 hover hex code
+   */
   const mainHoverColorHexCode = computed(() => {
     return serverConfig.value?.data?.info?.common?.mainHoverColorHexCode || "";
   });
 
+  /**
+   * Main color의 hover에 대한 hover hex code
+   */
   const backgroundGradientStandardColor = computed(() => {
     return (
       serverConfig.value?.data?.info?.common?.backgroundGradientStandardColor ||
@@ -273,7 +285,7 @@ export const useConfigStore = defineStore("config", () => {
    * 임시 Mock 데이터
    */
   function getMockConfigData() {
-    const office = "komsco";
+    const office = "oci";
     const privateImageServerUrl =
       "https://raw.githubusercontent.com/Developer-Brandon/image-temp-repo/refs/heads/main";
     if (office === "oci") {

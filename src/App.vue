@@ -242,7 +242,7 @@ onMounted(async () => {
 
       if (configStore.office === "KOMSCO") {
         adminAccount = {
-          id: "webo",
+          id: "aionu",
           pw: "New1234!",
         };
       }

@@ -71,7 +71,7 @@ app.use(router);
  *
  * ⚠️ 주의: 민감한 정보(API 키 등)는 여기에 저장하면 안 됩니다!
  */
-app.config.globalProperties.$appName = "OCI AI Works";
+app.config.globalProperties.$appName = "Packaging AI Works";
 
 /**
  * 추가 전역 프로퍼티 예시 (필요시 추가)
@@ -102,5 +102,5 @@ if (import.meta.env.PROD) {
   console.log("✅ [운영] Vue3 애플리케이션 초기화 완료");
   console.log("🎨 스타일 시스템: SCSS (@forward/@use)");
   console.log("🔧 상태관리: Pinia");
-  console.log("📦 운영 서버: https://oci-poc-web-service.vercel.app/");
+  console.log("📦 운영 서버: https://packaging-ai-works.vercel.app/");
 }
