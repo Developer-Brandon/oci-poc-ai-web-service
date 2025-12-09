@@ -412,10 +412,13 @@ onMounted(() => {
 .login-form-section {
   flex: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: $spacing-10;
   max-width: 468px;
+  /* ✅ 세로 중앙 정렬 추가, t */
+  height: 125% !important;
 
   /* 
     반응형: 작은 화면에서는 전체 너비
@@ -425,7 +428,6 @@ onMounted(() => {
     padding: $spacing-6;
   }
 }
-
 .login-container {
   /* 
     로그인 폼을 감싸는 컨테이너
@@ -469,6 +471,7 @@ onMounted(() => {
   /* 입력 필드들을 수직으로 배치 */
   display: flex;
   flex-direction: column;
+  margin-bottom: 35px;
 }
 
 .form-group {

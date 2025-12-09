@@ -104,7 +104,7 @@ const selectAgent = () => {
   /* 카드 내용 컨테이너 - z-index로 배경 위에 표시 */
   position: relative;
   z-index: 1;
-  padding: 2rem 1.5rem; /* 32px top/bottom, 24px left/right */
+  padding: 1.5rem; /* 32px top/bottom, 24px left/right */
   display: flex;
   flex-direction: column;
   align-items: center;

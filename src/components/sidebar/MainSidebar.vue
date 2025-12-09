@@ -728,7 +728,6 @@ onUnmounted(() => {
   align-items: center;
   justify-content: space-between;
   gap: var.$spacing-2;
-
   transition: all 0.2s ease;
 
   &:hover {
@@ -767,13 +766,11 @@ onUnmounted(() => {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 10px;
   padding: var.$spacing-1 var.$spacing-2;
   color: var.$text-muted;
   border-radius: 4px;
-
   transition: all 0.2s ease;
-
   &:hover {
     color: var.$black;
     background-color: rgba(var(--sub-color-rgb), 0.7);

@@ -81,25 +81,23 @@ const randomQuestions = computed(() => {
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
   }
-
   /* 호버 상태: 약간 위로 올라가고 그림자 추가 (트렌디한 효과) */
   &:hover {
     transform: translateY(-8px);
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
     border-color: var(--color-primary);
   }
-
   /* 활성 상태 (클릭 중) */
   &:active {
     transform: translateY(-4px);
   }
 }
 
+/* 카드 내용 컨테이너 - z-index로 배경 위에 표시 */
 .card-content {
-  /* 카드 내용 컨테이너 - z-index로 배경 위에 표시 */
   position: relative;
   z-index: 1;
-  padding: 1.5rem 1rem; /* 32px top/bottom, 24px left/right */
+  padding: 1.5rem; /* 32px top/bottom, 24px left/right */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -107,6 +105,7 @@ const randomQuestions = computed(() => {
   gap: 1rem; /* 요소 간의 간격 */
   width: 100%;
   height: 100%;
+  margin-top: -1px;
 }
 
 .agent-icon-wrapper {
@@ -157,6 +156,11 @@ const randomQuestions = computed(() => {
     background-color: $white;
     border-radius: 27px;
     text-align: left;
+    overflow: hidden; // ← 넘치는 글 숨김
+    text-overflow: ellipsis; // ← '…' 처리
+    white-space: nowrap; // ← 한 줄로 제한
+    display: block; // ← 대부분 block/inline-block이 안전
+    max-width: 100%; // ← 부모 넓이 기준으로 말줄임
   }
 }
 .agent-cta {

@@ -41,7 +41,15 @@
     <div class="input-bottom-section">
       <!-- 좌측: AI Agent 버튼 -->
       <button class="ai-agent-btn" @click="toggleAgentMenu">
-        <span class="ai-agent-text">AI Agent</span>
+        <span class="ai-agent-text">
+          <CommonIcon
+            :src="aiAgentBrightIcon"
+            width="16"
+            height="16"
+            alt="AI agent 불빛 아이콘"
+          />
+          AI Agent</span
+        >
       </button>
 
       <!-- 우측: 사용량 표시 -->
@@ -81,7 +89,11 @@
         @click="closeAgentMenu"
       />
       <div v-if="agentMenuVisible" class="agent-menu">
-        <div v-for="agent in agentList" :key="agent.id" class="agent-menu-item">
+        <div
+          v-for="agent in aiAgentList"
+          :key="agent.id"
+          class="agent-menu-item"
+        >
           {{ agent.title }}
         </div>
       </div>
@@ -101,8 +113,10 @@
  * - 메시지 입력은 보이지 않는 textarea에서 처리
  */
 
-import { ref, computed, nextTick } from "vue";
+import { ref, computed } from "vue";
 import { useConfigStore } from "@/stores/configStore";
+import aiAgentBrightIcon from "@/assets/images/main/icon/ai_agent_bright.png";
+import CommonIcon from "@/components/icon/CommonIcon.vue";
 
 const configStore = useConfigStore();
 
@@ -138,7 +152,16 @@ const selectedAgent = ref({
   wholeUsageCount: "100",
 });
 
-const agentList = computed(() => configStore.aiModels || []);
+const aiAgentList = computed(() => [
+  {
+    id: "1",
+    title: "사규AI",
+  },
+  {
+    id: "2",
+    title: "OnboardingAI",
+  },
+]);
 
 /* ==================== Computed ==================== */
 const displayMessage = computed(() => {
@@ -305,7 +328,7 @@ watch(
   &:hover {
     background-color: var(--primary-color);
     color: var.$white;
-    transform: scale(1.05);
+    transform: scale(1.15);
     box-shadow: 0 4px 12px rgba(208, 2, 27, 0.2);
   }
 
@@ -320,6 +343,9 @@ watch(
 
 .ai-agent-text {
   font-size: var.$font-size-sm;
+  // .bight-border {
+  //   border: 1px solid var(--primary-color);
+  // }
 }
 
 /* ==================== 우측 아이콘 그룹 ==================== */
@@ -441,9 +467,8 @@ watch(
 
 .agent-menu {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 840px;
+  left: 575px;
   background-color: var.$bg-primary;
   border: 1px solid var.$gray-200;
   border-radius: var.$border-radius-lg;
@@ -453,14 +478,14 @@ watch(
   min-width: 250px;
   max-height: 400px;
   overflow-y: auto;
-  animation: scaleIn 0.2s ease-out;
+  transform: translate(-50%, -50%);
 }
 
 .agent-menu-item {
   padding: var.$spacing-3 var.$spacing-4;
   cursor: pointer;
   font-size: var.$font-size-sm;
-  color: var.$text-primary;
+  color: var.$text-primary !important;
   transition: all 0.2s ease;
 
   &:hover {
