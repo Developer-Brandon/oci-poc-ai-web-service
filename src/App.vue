@@ -139,12 +139,37 @@ function updateOpengraphInfo(opengraphImageUrl, opengraphDescription) {
       console.log("✅ og:image 메타 태그 생성됨");
     }
 
-    // content 속성에 이미지 URL 설정
-    ogImageMeta.setAttribute("content", opengraphImageUrl);
-    console.log("🖼️ Open Graph 이미지 업데이트:", opengraphImageUrl);
+    // ✅ 캐시 방지를 위해 timestamp 추가
+    const timestampUrl = `${opengraphImageUrl}?t=${Date.now()}`;
+    ogImageMeta.setAttribute("content", timestampUrl);
+    console.log("🖼️ Open Graph 이미지 업데이트:", timestampUrl);
   } else {
     console.warn("⚠️ opengraphImageUrl이 없습니다");
   }
+
+  // ==================== og:description 설정 ====================
+  if (opengraphDescription) {
+    let ogDescriptionMeta = document.querySelector(
+      'meta[property="og:description"]'
+    );
+
+    // 메타 태그가 없으면 새로 생성
+    if (!ogDescriptionMeta) {
+      ogDescriptionMeta = document.createElement("meta");
+      ogDescriptionMeta.setAttribute("property", "og:description");
+      document.head.appendChild(ogDescriptionMeta);
+      console.log("✅ og:description 메타 태그 생성됨");
+    }
+
+    // content 속성에 설명 텍스트 설정
+    ogDescriptionMeta.setAttribute("content", opengraphDescription);
+    console.log("📝 Open Graph 설명 업데이트:", opengraphDescription);
+  } else {
+    console.warn("⚠️ opengraphDescription이 없습니다");
+  }
+
+  console.log("✅ Open Graph 정보 업데이트 완료");
+}
 
   // ==================== og:description 설정 ====================
   if (opengraphDescription) {

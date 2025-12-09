@@ -342,9 +342,24 @@ function handleSignup() {
   );
 }
 
+function initializeZoom() {
+  // ✅ 방법 1: querySelector 사용 (추천)
+  const contentArea = document.querySelector(".login-form-section");
+
+  if (contentArea) {
+    contentArea.style.transform = "scale(0.9)";
+    contentArea.style.transformOrigin = "top center";
+    console.log("🔍 .content-area 크기: 80% (transform 사용)");
+  } else {
+    console.warn("⚠️ .content-area 요소를 찾을 수 없습니다");
+  }
+}
+
 /* ==================== 라이프사이클 훅 ==================== */
 
 onMounted(() => {
+  // 줌 초기화
+  initializeZoom();
   // 저장된 이메일 로드
   authStore.loadSavedEmail();
 

@@ -375,7 +375,6 @@ const showContextMenu = (event, chatId) => {
  * closeContextMenu: 우측 메뉴 닫기 (채팅용)
  */
 const closeContextMenu = () => {
-  console.log("❌ 우측 메뉴 닫기");
   contextMenu.value.isVisible = false;
   contextMenu.value.chatId = null;
 };
