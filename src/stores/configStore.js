@@ -283,7 +283,7 @@ export const useConfigStore = defineStore("config", () => {
    * 임시 Mock 데이터
    */
   function getMockConfigData() {
-    const office = "komsco";
+    const office = "oci";
     const privateImageServerUrl =
       "https://raw.githubusercontent.com/Developer-Brandon/image-temp-repo/refs/heads/main";
     if (office === "oci") {
@@ -554,27 +554,6 @@ export const useConfigStore = defineStore("config", () => {
 
     // 검증 로그 출력
     console.dir(themeValues);
-  }
-
-  /**
-   * LocalStorage 캐시에서 설정 복원
-   * 사용 시나리오:
-   * - API 호출 실패 시
-   * - 오프라인 상태일 때
-   */
-  function tryRestoreFromCache() {
-    try {
-      const cached = localStorage.getItem("config_cache");
-      if (cached) {
-        serverConfig.value = JSON.parse(cached);
-        applyThemeToDOM();
-        console.log("⚠️ Using cached config data");
-      } else {
-        console.warn("⚠️ No cached config available, using defaults");
-      }
-    } catch (err) {
-      console.error("❌ Failed to restore from cache:", err);
-    }
   }
 
   /**

@@ -68,7 +68,7 @@ function initializeZoom() {
   const contentArea = document.querySelector(".main-content");
 
   if (contentArea) {
-    contentArea.style.transform = "scale(0.9)";
+    contentArea.style.transform = "scale(0.8)";
     contentArea.style.transformOrigin = "top center";
     console.log("🔍 .content-area 크기: 80% (transform 사용)");
   } else {

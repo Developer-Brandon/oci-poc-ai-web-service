@@ -7,7 +7,7 @@
           <div class="login-header">
             <h1 class="login-title">로 그 인</h1>
             <p class="login-subtitle">
-              {{ configStore.office }} AI Works 에 오신것을 환영합니다
+              {{ configStore.office }} AI Packaging 에 오신것을 환영합니다
             </p>
           </div>
           <form class="login-form" @submit.prevent="handleLogin">
@@ -171,8 +171,6 @@ const isFormValid = computed(() => {
 });
 
 /* ==================== 메서드 (함수) ==================== */
-
-// 팝업 표시 함수
 function showPopupMessage(title, message, confirmText = "확인") {
   popupConfig.value = { title, message, confirmText };
   showPopup.value = true;
@@ -224,8 +222,6 @@ function validateForm() {
 // 로그인 처리 - async/await를 사용하여 비동기 처리 , 로딩 중이면 중복 제출 방지
 async function handleLogin() {
   if (isLoading.value) return;
-
-  // 폼 검증
   if (!validateForm()) return;
 
   isLoading.value = true;
@@ -334,7 +330,7 @@ function initializeZoom() {
   const contentArea = document.querySelector(".login-form-section");
 
   if (contentArea) {
-    contentArea.style.transform = "scale(0.9)";
+    contentArea.style.transform = "scale(0.8)";
     contentArea.style.transformOrigin = "top center";
     console.log("🔍 .content-area 크기: 80% (transform 사용)");
   } else {

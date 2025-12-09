@@ -5,7 +5,7 @@
       <div class="sidebar__logo">
         <img
           :src="configStore.logoImageUrl"
-          alt="AI Works Logo"
+          alt="AI Packaging Logo"
           class="sidebar__logo-image"
         />
       </div>
@@ -583,8 +583,8 @@ onUnmounted(() => {
     border-bottom: 1px solid var(--color-border-light);
 
     &-image {
-      width: 61px;
-      height: 29px;
+      width: 63px;
+      height: 33px;
       object-fit: contain;
       transition: all 0.3s ease;
       image-rendering: crisp-edges;

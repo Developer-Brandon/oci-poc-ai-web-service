@@ -1,10 +1,10 @@
-# OCI AI Works - 서비스 페이지
+# OCI AI Packaging - 서비스 페이지
 
 > LLM 기반 ChatGPT와 유사한 AI 에이전트 서비스 웹페이지
 
 ## 📋 프로젝트 개요
 
-OCI AI Works는 내부 직원들을 위한 AI 에이전트 기반 서비스입니다.
+OCI AI Packaging는 내부 직원들을 위한 AI 에이전트 기반 서비스입니다.
 
 - **주요 기능**: AI 챗봇, 다중 에이전트 선택, 문서/이미지 업로드
 - **아키텍처**: Frontend (Vue3) - Backend (FastAPI) - Database (PostgreSQL)

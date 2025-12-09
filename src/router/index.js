@@ -38,7 +38,7 @@ const routes = [
     meta: {
       requiresAuth: false, // 로그인 필수 X
       layout: "AuthLayout", // 인증 레이아웃 사용
-      title: "AI Works", // 페이지 제목
+      title: "AI Packaging", // 페이지 제목
     },
   },
   // 2. main route - 채팅 페이지
@@ -53,7 +53,7 @@ const routes = [
     meta: {
       requiresAuth: true, // 로그인 필수 O
       layout: "MainLayout", // 메인 레이아웃 사용
-      title: "AI Works",
+      title: "AI Packaging",
     },
   },
   // 3. notfound page - 404 페이지

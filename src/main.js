@@ -35,7 +35,6 @@ import "@/assets/styles/global/whole_globals.scss";
 const app = createApp(App);
 
 /* ==================== Pinia 스토어 설정 ==================== */
-
 /**
  * Pinia 스토어 설정
  *
@@ -71,7 +70,7 @@ app.use(router);
  *
  * ⚠️ 주의: 민감한 정보(API 키 등)는 여기에 저장하면 안 됩니다!
  */
-app.config.globalProperties.$appName = "Packaging AI Works";
+app.config.globalProperties.$appName = "Packaging AI Packaging";
 
 /**
  * 추가 전역 프로퍼티 예시 (필요시 추가)

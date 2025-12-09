@@ -7,7 +7,9 @@
   <div v-if="configStore.isLoading" class="config-loading">
     <div class="loading-content">
       <div class="loading-spinner"></div>
-      <p class="loading-text">{{ office }} AI Works를 준비하고 있습니다...</p>
+      <p class="loading-text">
+        {{ office }} AI Packaging를 준비하고 있습니다...
+      </p>
     </div>
   </div>
   <!-- 
@@ -124,7 +126,7 @@ const currentLayout = computed(() => {
  * - Vue2: this.updateOpengraphInfo() 메서드 형식
  * - Vue3: 함수형 방식으로 직접 호출 (더 간단함)
  */
-function updateOpengraphInfo(opengraphImageUrl, opengraphDescription) {
+async function updateOpengraphInfo(opengraphImageUrl, opengraphDescription) {
   console.log("🌐 Open Graph 정보 업데이트 시작");
 
   // ==================== og:image 설정 ====================
