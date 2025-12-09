@@ -293,10 +293,10 @@ watch(
   align-items: center;
   gap: var.$spacing-2;
   padding: var.$spacing-2 var.$spacing-4;
-  border: 2px solid var(--primary-color, #d0021b);
+  border: 2px solid var(--primary-color);
   border-radius: var.$border-radius-full;
   background-color: transparent;
-  color: var(--primary-color, #d0021b);
+  color: var(--primary-color);
   cursor: pointer;
   font-size: var.$font-size-sm;
   font-weight: 600;
@@ -304,7 +304,7 @@ watch(
   flex-shrink: 0;
 
   &:hover {
-    background-color: var(--primary-color, #d0021b);
+    background-color: var(--primary-color);
     color: var.$white;
     transform: scale(1.05);
     box-shadow: 0 4px 12px rgba(208, 2, 27, 0.2);
