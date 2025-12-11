@@ -283,7 +283,7 @@ export const useConfigStore = defineStore("config", () => {
    * 임시 Mock 데이터
    */
   function getMockConfigData() {
-    const office = "oci";
+    const office = "komsco";
     const privateImageServerUrl =
       "https://raw.githubusercontent.com/Developer-Brandon/image-temp-repo/refs/heads/main";
     if (office === "oci") {
@@ -484,7 +484,7 @@ export const useConfigStore = defineStore("config", () => {
                   order: "3",
                   type: "questionCard",
                   cardThumbnailUrl: "",
-                  title: "KOSCOM 자주하는 질문",
+                  title: "KOMSCO 자주하는 질문",
                   questionList: [
                     "Q. 사업별 예산 편성의 기준이 궁금해요",
                     "Q. 특허 관련 자료를 분석해주세요",
