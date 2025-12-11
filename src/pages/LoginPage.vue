@@ -122,12 +122,10 @@ import { useRouter } from "vue-router";
 import { STORAGE_KEYS } from "@/utils/constants";
 import { useConfigStore } from "@/stores/configStore";
 
-const emailIconPath = new URL(
-  "@/assets/images/login/icon/email.png",
-  import.meta.url
-).href;
+const emailIconPath = new URL("@/assets/images/icon/email.png", import.meta.url)
+  .href;
 const passwordIconPath = new URL(
-  "@/assets/images/login/icon/key.png",
+  "@/assets/images/icon/key.png",
   import.meta.url
 ).href;
 const router = useRouter();
@@ -621,7 +619,7 @@ onMounted(() => {
   height: 100%;
   background-image: var(
     --login-pannel-image,
-    url("@/assets/images/login/banner/pannel.png")
+    url("@/assets/images/banner/pannel.png")
   );
   background-size: cover;
   background-position: center;

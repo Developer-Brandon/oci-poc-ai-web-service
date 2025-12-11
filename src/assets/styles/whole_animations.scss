@@ -384,3 +384,15 @@
 .animate-delay-5 {
   animation-delay: 0.5s;
 }
+
+// text 빛나는 animation
+
+@keyframes textGlow {
+  0%,
+  100% {
+    text-shadow: 0 0 5px var(--primary-color);
+  }
+  50% {
+    text-shadow: 0 0 15px var(--primary-color);
+  }
+}

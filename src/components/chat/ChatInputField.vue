@@ -103,20 +103,28 @@
         <span class="ai-agent-btn__text">
           <CommonIcon
             :src="aiAgentBrightIcon"
-            width="16"
-            height="16"
+            :size="16"
             alt="AI agent 불빛 아이콘"
           />
           AI Agent</span
         >
       </button>
 
-      <div class="ai-model-info">
-        <span class="ai-model-info__label">{{ selectedAgent.modelName }}</span>
+      <div class="ai-model-info no-drag">
+        <div class="ai-model-info__label">
+          <AIModelLabel
+            class="ai-model-info__label__image"
+            :modelName="selectedAgent.modelName"
+            :size="18"
+          />
+          <span class="ai-model-info__label__text">{{
+            selectedAgent.modelName
+          }}</span>
+        </div>
         <span class="ai-model-info__usage">
-          <span class="current">{{ selectedAgent.realUsageCount }}</span>
+          <span class="current">{{ chatUsageCount.realUsageCount }}</span>
           <span class="separator">/</span>
-          <span class="total">{{ selectedAgent.wholeUsageCount }}</span>
+          <span class="total">{{ chatUsageCount.wholeUsageCount }}</span>
         </span>
       </div>
     </div>
@@ -148,8 +156,6 @@
         </div>
       </div>
     </Teleport>
-
-    <!-- ==================== Agent Context Menu (Teleport) ==================== -->
   </div>
 </template>
 
@@ -160,15 +166,20 @@
 
 import { ref, computed, onMounted } from "vue";
 import { useConfigStore } from "@/stores/configStore";
-import aiAgentBrightIcon from "@/assets/images/main/icon/ai_agent_bright.png";
 import CommonIcon from "@/components/icon/CommonIcon.vue";
 import { useGradient } from "@/composables/useGradient.js";
-import whiteArrow from "@/assets/images/main/icon/send_button_white_arrow.png";
+import aiAgentBrightIcon from "@/assets/images/icon/ai_agent_bright.png";
+import whiteArrow from "@/assets/images/icon/send_button_white_arrow.png";
+import aiModelIcon from "@/components/chat/AIModelLabel.vue";
 // const { gradientObject, setGradient } = useGradient();
 const configStore = useConfigStore();
 
 const isOpenAIWebSearchMode = ref(false);
 const isFileUploadMode = ref(false);
+
+const selectedAgent = ref({
+  modelName: "GPT-5",
+});
 
 /* ==================== Props ==================== */
 const props = defineProps({
@@ -195,9 +206,7 @@ const inputMessage = ref(props.modelValue || "");
 const fileInputEl = ref(null);
 const agentMenuVisible = ref(false);
 
-const selectedAgent = ref({
-  id: "1",
-  modelName: "GPT-5",
+const chatUsageCount = ref({
   realUsageCount: "100",
   wholeUsageCount: "100",
 });
@@ -310,6 +319,7 @@ const closeAgentMenu = () => {
 /* ==================== Watch ==================== */
 // props.modelValue 변경 시 동기화
 import { watch } from "vue";
+import AIModelLabel from "./AIModelLabel.vue";
 
 watch(
   () => props.modelValue,
@@ -475,9 +485,18 @@ onMounted(() => {
   padding: 0 $spacing-3;
   flex-shrink: 0;
   &__label {
+    display: flex;
+    align-items: center;
     font-size: $font-size-sm;
-    color: $text-muted;
     font-weight: 500;
+    margin-right: 10px;
+    &__image {
+      margin-right: 2.5px;
+    }
+    &__text {
+      display: flex;
+      align-items: center;
+    }
   }
   &__usage {
     display: flex;

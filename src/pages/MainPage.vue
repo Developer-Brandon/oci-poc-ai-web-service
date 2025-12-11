@@ -6,9 +6,9 @@
       <MainGreeting />
     </section>
     <!-- 2. 에이전트 카드 영역 -->
-    <section class="card-list-section">
+    <section class="card-list-section no-drag">
       <section class="card-list-section__greeting">
-        <p class="card-list-section__greeting__text disable-drag">
+        <p class="card-list-section__greeting__text">
           ✨자주 사용하는 AI Agent
         </p>
       </section>
@@ -115,6 +115,7 @@ onMounted(() => {
     width: 984px;
     margin: 0 auto;
     &__text {
+      animation: textGlow 1.5s ease-in-out infinite; // 3s → 1.5s
       text-align: left;
       color: #686868;
       font-size: 25px;

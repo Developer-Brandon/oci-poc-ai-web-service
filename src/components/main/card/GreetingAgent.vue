@@ -90,9 +90,8 @@ const selectAgent = () => {
     transform: translateY(-4px);
   }
 }
-
+/* 그라데이션 배경 (선택사항) */
 .card-background {
-  /* 그라데이션 배경 (선택사항) */
   background: linear-gradient(
     135deg,
     rgba(var(--primary-color), 0.02) 0%,
@@ -100,9 +99,8 @@ const selectAgent = () => {
   );
   pointer-events: none;
 }
-
+/* 카드 내용 컨테이너 - z-index로 배경 위에 표시 */
 .card-content {
-  /* 카드 내용 컨테이너 - z-index로 배경 위에 표시 */
   position: relative;
   z-index: 1;
   padding: 1.5rem; /* 32px top/bottom, 24px left/right */
@@ -110,31 +108,9 @@ const selectAgent = () => {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 1rem; /* 요소 간의 간격 */
+  gap: 1rem;
   width: 100%;
   height: 100%;
-}
-
-.agent-icon-wrapper {
-  /* 아이콘을 감싸는 래퍼 - 배경 원형 처리 */
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: linear-gradient(
-    135deg,
-    rgba(var(--color-primary), 0.1) 0%,
-    rgba(var(--sub-color), 0.1) 100%
-  );
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  /* 호버 시 회전 애니메이션 */
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-
-  .agent-card:hover & {
-    transform: rotate(10deg) scale(1.05);
-  }
 }
 
 .agent-icon {
@@ -158,5 +134,27 @@ const selectAgent = () => {
   margin: 0;
   white-space: pre-wrap; /* 줄바꿈 유지 */
   word-break: keep-all;
+}
+
+.agent-icon-wrapper {
+  /* 아이콘을 감싸는 래퍼 - 배경 원형 처리 */
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    rgba(var(--color-primary), 0.1) 0%,
+    rgba(var(--sub-color), 0.1) 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* 호버 시 회전 애니메이션 */
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  .agent-card:hover & {
+    transform: rotate(10deg) scale(1.05);
+  }
 }
 </style>

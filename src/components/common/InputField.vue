@@ -100,7 +100,6 @@
 
     <!-- 에러 메시지 -->
     <div v-if="error" class="error-message">
-      <!-- <span class="error-icon">⚠️</span> -->
       {{ error }}
     </div>
   </div>
@@ -201,12 +200,10 @@ const showPassword = ref(false);
 // 포커스 상태 (입력 중인지 여부)
 const isFocused = ref(false);
 
-const eyeIconPath = new URL(
-  "@/assets/images/login/icon/eye.png",
-  import.meta.url
-).href;
+const eyeIconPath = new URL("@/assets/images/icon/eye.png", import.meta.url)
+  .href;
 const eyeOffIconPath = new URL(
-  "@/assets/images/login/icon/eye-off.png",
+  "@/assets/images/icon/eye-off.png",
   import.meta.url
 ).href;
 

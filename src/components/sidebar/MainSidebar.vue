@@ -25,7 +25,7 @@
       />
       <img
         class="sidebar__search-icon"
-        src="@/assets/images/main/icon/reading_grasses.png"
+        src="@/assets/images/icon/reading_grasses.png"
       />
     </div>
     <!-- ==================== 채팅 히스토리 섹션 ==================== -->
@@ -191,8 +191,8 @@ import { ref, computed, onMounted, nextTick, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import { useConfigStore } from "@/stores/configStore";
-import garbageIcon from "@/assets/images/main/icon/garbage.png";
-import pencilIcon from "@/assets/images/main/icon/pencil.png";
+import garbageIcon from "@/assets/images/icon/garbage.png";
+import pencilIcon from "@/assets/images/icon/pencil.png";
 
 /* ==================== 라우터 및 스토어 ==================== */
 const router = useRouter();

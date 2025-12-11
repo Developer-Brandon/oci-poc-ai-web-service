@@ -101,8 +101,8 @@ const randomQuestions = computed(() => {
     width: 100%;
     height: 100%;
     margin-top: -1px;
+    /* 에이전트 이름 */
     .agent-name {
-      /* 에이전트 이름 */
       font-size: 1.4rem; /* 20px */
       font-weight: 700;
       color: $text-primary;
@@ -113,7 +113,9 @@ const randomQuestions = computed(() => {
       list-style: none;
       padding: 0;
       margin: 0 auto;
+      width: 90%;
       .faq {
+        width: 100%;
         font-size: 11.5px;
         color: $text-primary;
         line-height: 1.2;
@@ -121,13 +123,13 @@ const randomQuestions = computed(() => {
         background-color: $white;
         border-radius: 27px;
         text-align: left;
-        overflow: hidden; // ← 넘치는 글 숨김
-        text-overflow: ellipsis; // ← '…' 처리
-        white-space: nowrap; // ← 한 줄로 제한
-        display: block; // ← 대부분 block/inline-block이 안전
-        max-width: 98%; // ← 부모 넓이 기준으로 말줄임
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: block;
         &:hover {
-          font-weight: 900;
+          color: $white;
+          background-color: var(--primary-color);
           transition: $transition-base;
         }
       }

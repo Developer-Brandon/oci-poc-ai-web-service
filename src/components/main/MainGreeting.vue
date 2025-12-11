@@ -1,8 +1,11 @@
 <!-- src/components/service/MainGreeting.vue -->
 <template>
-  <div class="greeting-container disable-drag">
+  <div class="greeting-container no-drag">
     <!-- 제목 영역: 동적으로 서버에서 받은 인사말 텍스트 렌더링 -->
-    <h1 class="greeting-title">안녕하세요. {{ authStore.userName }}님!</h1>
+    <h1 class="greeting-title">
+      안녕하세요. <span class="user-name">{{ authStore.userName }}</span
+      >님!
+    </h1>
     <!-- 설명 텍스트 영역: 부드러운 아래쪽 애니메이션으로 진입 -->
     <p class="greeting-description">오늘은 어떤 업무를 시작해볼까요?</p>
   </div>
@@ -41,6 +44,10 @@ const authStore = useAuthStore();
   margin: 0;
   letter-spacing: -0.02em; /* 타이포그래피 개선 */
   transition: color 0.3s ease; /* 트렌디한 hover 효과 */
+  .user-name {
+    color: var(--primary-color);
+    animation: textGlow 1.5s ease-in-out infinite; // 3s → 1.5s
+  }
 }
 /* 설명 텍스트 스타일 */
 .greeting-description {
