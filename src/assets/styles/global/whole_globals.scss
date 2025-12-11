@@ -239,3 +239,9 @@ button {
 .text-success {
   color: #27ae60;
 }
+
+/* 드래그 방지 */
+.disable-drag {
+  cursor: default;
+  user-select: none;
+}

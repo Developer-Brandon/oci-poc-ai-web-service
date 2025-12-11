@@ -64,14 +64,6 @@ const selectAgent = () => {
   border-radius: 1rem; /* 16px */
   overflow: hidden;
   cursor: pointer;
-
-  /* ==================== 3D 원근감 설정 ==================== */
-  /**
-   * perspective: 3D 변환의 깊이감을 조절
-   * - 값이 작을수록 더 극적인 3D 효과
-   * - 1000px: 표준적인 깊이감
-   * - 이를 통해 호버 시 카드가 입체적으로 보임
-   */
   perspective: 1000px;
 
   /* 기본 배경 */
@@ -82,7 +74,7 @@ const selectAgent = () => {
 
   /* 접근성: 키보드 네비게이션 포커스 표시 */
   &:focus-visible {
-    outline: 2px solid var(--color-primary);
+    outline: 2px solid var(--sub-color);
     outline-offset: 2px;
   }
 
@@ -90,7 +82,7 @@ const selectAgent = () => {
   &:hover {
     transform: translateY(-8px);
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-    border-color: var(--color-primary);
+    border-color: var(--sub-color);
   }
 
   /* 활성 상태 (클릭 중) */

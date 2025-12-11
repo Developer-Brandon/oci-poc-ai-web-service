@@ -283,7 +283,7 @@ export const useConfigStore = defineStore("config", () => {
    * 임시 Mock 데이터
    */
   function getMockConfigData() {
-    const office = "komsco";
+    const office = "oci";
     const privateImageServerUrl =
       "https://raw.githubusercontent.com/Developer-Brandon/image-temp-repo/refs/heads/main";
     if (office === "oci") {

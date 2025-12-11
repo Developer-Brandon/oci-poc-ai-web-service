@@ -1,6 +1,6 @@
 <!-- src/components/service/MainGreeting.vue -->
 <template>
-  <div class="greeting-container">
+  <div class="greeting-container disable-drag">
     <!-- 제목 영역: 동적으로 서버에서 받은 인사말 텍스트 렌더링 -->
     <h1 class="greeting-title">안녕하세요. {{ authStore.userName }}님!</h1>
     <!-- 설명 텍스트 영역: 부드러운 아래쪽 애니메이션으로 진입 -->
@@ -22,39 +22,35 @@ const authStore = useAuthStore();
 @use "@/assets/styles/whole_variables" as *;
 @use "@/assets/styles/whole_animations" as *;
 
+/* 인사말 영역 기본 레이아웃 */
 .greeting-container {
-  /* 인사말 영역 기본 레이아웃 */
   display: flex;
   flex-direction: column;
   gap: 0.875rem; /* 16px 정도의 간격 */
   margin-bottom: 3rem; /* 에이전트 카드와의 거리 */
   text-align: center;
+  cursor: default;
+  user-select: none;
 }
 
+/* 큰 제목 스타일 */
 .greeting-title {
-  /* 큰 제목 스타일 */
-  font-size: 3rem; /* 32px */
+  font-size: 2.5rem; /* 32px */
   font-weight: 350;
   color: $text-primary;
   margin: 0;
   letter-spacing: -0.02em; /* 타이포그래피 개선 */
-
-  /* 트렌디한 hover 효과 */
-  transition: color 0.3s ease;
+  transition: color 0.3s ease; /* 트렌디한 hover 효과 */
 }
-
+/* 설명 텍스트 스타일 */
 .greeting-description {
-  /* 설명 텍스트 스타일 */
-  font-size: 1.5rem; /* 16px */
+  font-size: 1.2rem; /* 16px */
   font-weight: 400;
   color: $text-secondary;
   margin: 0;
   line-height: 1.5;
   opacity: 0.8;
-
-  /* 부드러운 색상 전환 */
-  transition: opacity 0.3s ease;
-
+  transition: opacity 0.3s ease; /* 부드러운 색상 전환 */
   &:hover {
     opacity: 1;
   }

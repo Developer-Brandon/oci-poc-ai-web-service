@@ -8,7 +8,7 @@
     <!-- 2. 에이전트 카드 영역 -->
     <section class="card-list-section">
       <section class="card-list-section__greeting">
-        <p class="card-list-section__greeting__text">
+        <p class="card-list-section__greeting__text disable-drag">
           ✨자주 사용하는 AI Agent
         </p>
       </section>
@@ -110,7 +110,7 @@ onMounted(() => {
 .card-list-section {
   /* 진입 애니메이션 */
   animation: fadeInDown 2s ease-out;
-  margin-bottom: 150px;
+  margin-bottom: 120px;
   &__greeting {
     width: 984px;
     margin: 0 auto;

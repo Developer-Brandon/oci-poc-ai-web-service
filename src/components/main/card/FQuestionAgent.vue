@@ -40,10 +40,8 @@ import { computed } from "vue";
 const configStore = useConfigStore();
 const cardInfo = configStore.aiAgentCards[2];
 
-// Emit 선언 (Vue3: defineEmits 함수 사용)
 const emit = defineEmits(["agent-select"]);
 
-// 에이전트 선택 핸들러
 const selectAgent = () => {
   emit("agent-select", props.agent);
 };
@@ -73,20 +71,18 @@ const randomQuestions = computed(() => {
   background: $white;
   border: 1px solid $gray-200;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.08); /* 먼 그림자 */
-
-  /* 부드러운 전환 효과 */
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* 접근성: 키보드 네비게이션 포커스 표시 */
   &:focus-visible {
-    outline: 2px solid var(--color-primary);
+    outline: 2px solid var(--sub-color);
     outline-offset: 2px;
   }
   /* 호버 상태: 약간 위로 올라가고 그림자 추가 (트렌디한 효과) */
   &:hover {
     transform: translateY(-8px);
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-    border-color: var(--color-primary);
+    border-color: var(--sub-color);
   }
   /* 활성 상태 (클릭 중) */
   &:active {
@@ -96,7 +92,7 @@ const randomQuestions = computed(() => {
   .card-content {
     position: relative;
     z-index: 1;
-    padding: 1.5rem; /* 32px top/bottom, 24px left/right */
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -105,38 +101,35 @@ const randomQuestions = computed(() => {
     width: 100%;
     height: 100%;
     margin-top: -1px;
-  }
-
-  .agent-name {
-    /* 에이전트 이름 */
-    font-size: 1.4rem; /* 20px */
-    font-weight: 700;
-    color: $text-primary;
-    margin-top: 5px;
-  }
-
-  .faq-list {
-    // 기본 불렛 제거
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    .faq {
-      font-size: 11.5px;
+    .agent-name {
+      /* 에이전트 이름 */
+      font-size: 1.4rem; /* 20px */
+      font-weight: 700;
       color: $text-primary;
-      line-height: 1.3;
-      padding: 8px 23px;
-      background-color: $white;
-      border-radius: 27px;
-      text-align: left;
-      overflow: hidden; // ← 넘치는 글 숨김
-      text-overflow: ellipsis; // ← '…' 처리
-      white-space: nowrap; // ← 한 줄로 제한
-      display: block; // ← 대부분 block/inline-block이 안전
-      max-width: 100%; // ← 부모 넓이 기준으로 말줄임
-      &:hover {
-        font-weight: 900;
-        transform: scale(1.02);
-        transition: $transition-base;
+      margin-top: 5px;
+    }
+    // 기본 불렛 제거
+    .faq-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 auto;
+      .faq {
+        font-size: 11.5px;
+        color: $text-primary;
+        line-height: 1.2;
+        padding: 8px 23px;
+        background-color: $white;
+        border-radius: 27px;
+        text-align: left;
+        overflow: hidden; // ← 넘치는 글 숨김
+        text-overflow: ellipsis; // ← '…' 처리
+        white-space: nowrap; // ← 한 줄로 제한
+        display: block; // ← 대부분 block/inline-block이 안전
+        max-width: 98%; // ← 부모 넓이 기준으로 말줄임
+        &:hover {
+          font-weight: 900;
+          transition: $transition-base;
+        }
       }
     }
   }

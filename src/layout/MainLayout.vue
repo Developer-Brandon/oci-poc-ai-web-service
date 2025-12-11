@@ -1,13 +1,11 @@
 <!-- src/layouts/MainLayout.vue -->
 <template>
   <div class="main-layout">
-    <!-- SideBar -->
     <MainSidebar
       class="main-sidebar"
       :is-open="isSidebarOpen"
       @close="closeSidebar"
     />
-    <!-- Main Conent -->
     <main class="content-area" :style="gradientObject">
       <router-view />
     </main>

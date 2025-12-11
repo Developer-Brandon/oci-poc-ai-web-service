@@ -88,13 +88,8 @@
           </button>
 
           <!-- 전송 버튼 (화살표) -->
-          <button
-            class="send-button"
-            :disabled="!inputMessage.trim() && attachedFiles.length === 0"
-            @click="sendMessage"
-            title="전송"
-          >
-            >
+          <button class="send-button" @click="sendMessage" title="전송">
+            <CommonIcon :src="whiteArrow" :size="35" />
           </button>
         </div>
       </div>
@@ -168,6 +163,7 @@ import { useConfigStore } from "@/stores/configStore";
 import aiAgentBrightIcon from "@/assets/images/main/icon/ai_agent_bright.png";
 import CommonIcon from "@/components/icon/CommonIcon.vue";
 import { useGradient } from "@/composables/useGradient.js";
+import whiteArrow from "@/assets/images/main/icon/send_button_white_arrow.png";
 // const { gradientObject, setGradient } = useGradient();
 const configStore = useConfigStore();
 
@@ -449,11 +445,9 @@ onMounted(() => {
 
 /* ==================== 전송 버튼 ==================== */
 .send-button {
-  width: 44px;
-  height: 44px;
-  border: none;
-  border-radius: 50%;
-  color: $black;
+  width: 40px;
+  height: 45px;
+  border-radius: 60%;
   cursor: pointer;
   font-size: 1.2rem;
   display: flex;
@@ -462,16 +456,11 @@ onMounted(() => {
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   box-shadow: 0 4px 12px rgba(208, 2, 27, 0.2);
   flex-shrink: 0;
+  background-color: var(--primary-color);
 
   &:hover:not(:disabled) {
-    transform: scale(1.12);
-    box-shadow: 0 6px 16px rgba(208, 2, 27, 0.3);
+    transform: scale(1.2);
   }
-
-  &:active:not(:disabled) {
-    transform: scale(0.95);
-  }
-
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
