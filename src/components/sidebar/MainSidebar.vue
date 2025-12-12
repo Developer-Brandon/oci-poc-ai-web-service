@@ -72,7 +72,6 @@
                 @click.stop
                 placeholder="새로운 제목 입력..."
               />
-
               <!-- 호버 시 우측 메뉴 버튼 -->
               <div class="sidebar__chat-actions">
                 <!-- 편집 모드가 아닐 때만 메뉴 버튼 표시 -->
@@ -99,7 +98,8 @@
     <!-- ==================== SideBar Footer (사용자 정보) ==================== -->
     <div class="sidebar__footer">
       <!-- 사용자 프로필 -->
-      <button class="sidebar__user-profile" @click.stop="showUserMenu($event)">
+      <button class="sidebar__user-profile">
+        <!-- @click.stop="showUserMenu($event)" -->
         <img
           :src="configStore.defaultProfileImage"
           alt="프로필"
@@ -159,7 +159,8 @@
 
   <!-- =============== 우측 메뉴 (Context Menu) - 사용자 메뉴 =============== -->
   <Teleport to="body" v-if="userMenu.isVisible">
-    <div class="sidebar__context-menu-overlay" @click="closeUserMenu" />
+    <div class="sidebar__context-menu-overlay" />
+    <!-- @click="closeUserMenu"  -->
     <div
       class="sidebar__context-menu"
       :style="{
@@ -173,13 +174,8 @@
       </button> -->
 
       <!-- 메뉴 항목: 로그아웃 -->
-      <button
-        class="sidebar__context-menu-item"
-        @click="
-          logout();
-          closeUserMenu();
-        "
-      >
+      <button class="sidebar__context-menu-item" @click="logout()">
+        <!-- closeUserMenu(); -->
         <span class="sidebar__context-menu-text">로그아웃</span>
       </button>
     </div>
@@ -481,28 +477,28 @@ const handleChatTitleKeydown = (event, chatId) => {
  * 2. 마우스 위치 기반 메뉴 좌표 계산
  * 3. 사용자 메뉴 열기
  */
-const showUserMenu = (event) => {
-  event.preventDefault();
-  event.stopPropagation();
+// const showUserMenu = (event) => {
+//   event.preventDefault();
+//   event.stopPropagation();
 
-  console.log("📋 사용자 메뉴 열기");
+//   console.log("📋 사용자 메뉴 열기");
 
-  userMenu.value = {
-    isVisible: true,
-    position: {
-      top: `${event.pageY}px`,
-      left: `${event.pageX}px`,
-    },
-  };
-};
+//   userMenu.value = {
+//     isVisible: true,
+//     position: {
+//       top: `${event.pageY}px`,
+//       left: `${event.pageX}px`,
+//     },
+//   };
+// };
 
-/**
- * closeUserMenu: 우측 메뉴 닫기 (사용자 메뉴용)
- */
-const closeUserMenu = () => {
-  console.log("❌ 사용자 메뉴 닫기");
-  userMenu.value.isVisible = false;
-};
+// /**
+//  * closeUserMenu: 우측 메뉴 닫기 (사용자 메뉴용)
+//  */
+// const closeUserMenu = () => {
+//   console.log("❌ 사용자 메뉴 닫기");
+//   userMenu.value.isVisible = false;
+// };
 
 onMounted(() => {
   if (configStore.office === "KOMSCO") {
@@ -526,18 +522,18 @@ onMounted(() => {
   // 문서 클릭 시 메뉴 닫기 이벤트 등록
   document.addEventListener("click", () => {
     closeContextMenu();
-    closeUserMenu();
+    // closeUserMenu();
   });
 });
 
 onUnmounted(() => {
   document.removeEventListener("click", closeContextMenu);
-  document.removeEventListener("click", closeUserMenu);
+  // document.removeEventListener("click", closeUserMenu);
 });
 </script>
 
 <style scoped lang="scss">
-@use "@/assets/styles/whole_variables.scss" as var;
+@use "@/assets/styles/whole_variables.scss" as *;
 
 /* ==================== SideBar 전체 구조 ==================== */
 .sidebar {
@@ -545,8 +541,8 @@ onUnmounted(() => {
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background-color: var.$bg-primary;
-  border-right: 1px solid var.$gray-200;
+  background-color: $white;
+  border-right: 1px solid $gray-200;
 
   overflow-y: auto;
 
@@ -559,17 +555,17 @@ onUnmounted(() => {
   }
 
   &::-webkit-scrollbar-thumb {
-    background: var.$gray-300;
+    background: $gray-300;
     border-radius: 3px;
 
     &:hover {
-      background: var.$gray-400;
+      background: $gray-400;
     }
   }
 
   /* ==================== SideBar Header (로고만) ==================== */
   &__header {
-    padding: var.$spacing-5;
+    padding: $spacing-5;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -595,9 +591,9 @@ onUnmounted(() => {
   &__new-chat {
     &-btn {
       cursor: pointer;
-      margin: 0 var.$spacing-6;
+      margin: 0 $spacing-6;
       margin-top: 18px;
-      padding: var.$spacing-3 var.$spacing-4;
+      padding: $spacing-3 $spacing-4;
       border: 1px solid var(--primary-color);
       border-radius: 8px;
       background-color: transparent;
@@ -613,7 +609,7 @@ onUnmounted(() => {
 
       &:hover {
         background-color: var(--primary-color);
-        color: var.$white;
+        color: $white;
         transform: scale(1.02);
         box-shadow: 0 4px 12px rgba(208, 2, 27, 0.2);
       }
@@ -630,12 +626,12 @@ onUnmounted(() => {
 
   /* ==================== SideBar HistoryChat ==================== */
   &__history-section {
-    margin-bottom: var.$spacing-4;
+    margin-bottom: $spacing-4;
 
     &-title {
       font-size: 12px;
       font-weight: 600;
-      color: var.$text-muted;
+      color: $secondary-text;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       margin: 0;
@@ -678,10 +674,10 @@ onUnmounted(() => {
 
     &-icon {
       position: absolute;
-      right: var.$spacing-4;
+      right: $spacing-4;
       top: 50%;
       transform: translateY(-50%);
-      color: var.$text-muted;
+      color: $secondary-text;
       font-size: 16px;
       pointer-events: none;
     }
@@ -690,7 +686,7 @@ onUnmounted(() => {
   &__history {
     flex: 1;
     overflow-y: auto;
-    padding: var.$spacing-4 24px;
+    padding: $spacing-4 24px;
 
     &::-webkit-scrollbar {
       width: 6px;
@@ -701,11 +697,11 @@ onUnmounted(() => {
     }
 
     &::-webkit-scrollbar-thumb {
-      background: var.$gray-300;
+      background: $gray-300;
       border-radius: 3px;
 
       &:hover {
-        background: var.$gray-400;
+        background: $gray-400;
       }
     }
   }
@@ -719,7 +715,7 @@ onUnmounted(() => {
 
 .sidebar__chat-item {
   padding: 8px 4px;
-  color: var.$text-secondary;
+  color: $secondary-text;
   font-size: 14px;
   cursor: pointer;
 
@@ -727,21 +723,21 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var.$spacing-2;
+  gap: $spacing-2;
   transition: all 0.2s ease;
 
   &:hover {
-    background-color: var.$gray-50;
-    color: var.$text-primary;
+    background-color: $gray-50;
+    color: $primary-text;
     animation: fadeInLeft 0.2s ease-out;
   }
 
   &--active {
-    background-color: var.$gray-100;
+    background-color: $gray-100;
     color: var(--primary-color);
     font-weight: 600;
     border-left: 3px solid var(--primary-color);
-    padding-left: calc(var.$spacing-4 - 3px);
+    padding-left: calc($spacing-4 - 3px);
   }
 }
 
@@ -754,7 +750,7 @@ onUnmounted(() => {
 
 .sidebar__chat-actions {
   display: none;
-  gap: var.$spacing-2;
+  gap: $spacing-2;
   flex-shrink: 0;
 
   .sidebar__chat-item:hover & {
@@ -767,13 +763,13 @@ onUnmounted(() => {
   border: none;
   cursor: pointer;
   font-size: 10px;
-  padding: var.$spacing-1 var.$spacing-2;
-  color: var.$text-muted;
+  padding: $spacing-1 $spacing-2;
+  color: $secondary-text;
   border-radius: 4px;
   transition: all 0.2s ease;
   &:hover {
-    color: var.$black;
-    background-color: rgba(var(--sub-color-rgb), 0.7);
+    color: $black;
+    background-color: $white;
     transform: scale(1.2);
   }
 }
@@ -784,11 +780,11 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   flex: 1;
-  padding: var.$spacing-8;
+  padding: $spacing-8;
 }
 
 .sidebar__empty-text {
-  color: var.$text-muted;
+  color: $secondary-text;
   font-size: 14px;
   text-align: center;
   margin: 0;
@@ -796,11 +792,11 @@ onUnmounted(() => {
 
 /* ==================== SideBar Footer (사용자 정보) ==================== */
 .sidebar__footer {
-  padding: var.$spacing-4;
-  border-top: 1px solid var.$gray-100;
+  padding: $spacing-4;
+  border-top: 1px solid $gray-100;
   display: flex;
   flex-direction: column;
-  gap: var.$spacing-3;
+  gap: $spacing-3;
   flex-shrink: 0;
 }
 
@@ -808,21 +804,21 @@ onUnmounted(() => {
   background: none;
   border: none;
   cursor: pointer;
-  padding: var.$spacing-2;
+  padding: $spacing-2;
   border-radius: 8px;
 
   display: flex;
   align-items: center;
-  gap: var.$spacing-3;
+  gap: $spacing-3;
 
   transition: all 0.2s ease;
 
   &:hover {
-    background-color: var.$gray-50;
+    background-color: $gray-50;
   }
 
   &:active {
-    background-color: var.$gray-100;
+    background-color: $gray-100;
   }
 }
 
@@ -838,18 +834,18 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var.$spacing-1;
+  gap: $spacing-1;
 }
 
 .sidebar__user-name {
   font-weight: 600;
   font-size: 14px;
-  color: var.$text-primary;
+  color: $primary-text;
 }
 
 .sidebar__user-role {
   font-size: 12px;
-  color: var.$text-muted;
+  color: $secondary-text;
 }
 
 /* ==================== 제목 편집 입력 필드 ==================== */
@@ -865,7 +861,7 @@ onUnmounted(() => {
   border: none;
   border-bottom: 2px solid var(--primary-color);
   background: none;
-  color: var.$text-primary;
+  color: $primary-text;
   font-size: 14px;
   padding: 2px 0;
 
@@ -875,7 +871,7 @@ onUnmounted(() => {
   }
 
   &::placeholder {
-    color: var.$text-muted;
+    color: $secondary-text;
   }
 }
 
@@ -891,7 +887,7 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: var.$z-popover - 10;
+  z-index: $z-popover - 10;
 }
 
 /**
@@ -901,18 +897,18 @@ onUnmounted(() => {
  * - Teleport로 body에 마운트되므로 fixed 사용
  * - top, left는 JavaScript에서 동적으로 설정
  *
- * z-index: var.$z-popover (1060)
+ * z-index: $z-popover (1060)
  */
 .sidebar__context-menu {
   position: fixed;
-  z-index: var.$z-popover;
+  z-index: $z-popover;
 
-  background-color: var.$bg-primary;
-  border: 1px solid var.$gray-200;
-  border-radius: var.$border-radius-md;
-  box-shadow: var.$shadow-lg;
+  background-color: $white;
+  border: 1px solid $gray-200;
+  border-radius: $border-radius-md;
+  box-shadow: $shadow-lg;
 
-  padding: var.$spacing-2 0;
+  padding: $spacing-2 0;
 
   animation: scaleIn 0.2s ease-out;
 
@@ -931,20 +927,20 @@ onUnmounted(() => {
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: var.$spacing-3;
-  padding: var.$spacing-2 var.$spacing-4;
-  font-size: var.$font-size-sm;
-  color: var.$text-primary;
+  gap: $spacing-3;
+  padding: $spacing-2 $spacing-4;
+  font-size: $font-size-sm;
+  color: $primary-text;
   text-align: left;
   transition: all 0.2s ease;
 
   &:hover {
-    background-color: var.$gray-50;
-    color: var.$text-primary;
+    background-color: $gray-50;
+    color: $primary-text;
   }
 
   &:active {
-    background-color: var.$gray-100;
+    background-color: $gray-100;
   }
 }
 

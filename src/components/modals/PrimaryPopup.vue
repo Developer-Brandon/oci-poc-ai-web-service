@@ -216,7 +216,7 @@ defineExpose({
 .popup-title {
   font-size: $font-size-xl;
   font-weight: $font-weight-bold;
-  color: $text-primary;
+  color: $primary-text;
   margin: 0;
 }
 
@@ -229,7 +229,7 @@ defineExpose({
 
 .popup-message {
   font-size: $font-size-base;
-  color: $text-secondary;
+  color: $secondary-text;
   line-height: 1.6;
   margin: 0;
   white-space: pre-line; /* 줄바꿈 지원 */

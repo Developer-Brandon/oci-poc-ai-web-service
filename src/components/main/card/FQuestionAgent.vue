@@ -66,23 +66,19 @@ const randomQuestions = computed(() => {
   border-radius: 1rem; /* 16px */
   overflow: hidden;
   cursor: pointer;
-
-  /* 기본 배경 */
   background: $white;
   border: 1px solid $gray-200;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.08); /* 먼 그림자 */
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.08); /* 먼 그림자 */
 
   /* 접근성: 키보드 네비게이션 포커스 표시 */
   &:focus-visible {
-    outline: 2px solid var(--sub-color);
     outline-offset: 2px;
   }
   /* 호버 상태: 약간 위로 올라가고 그림자 추가 (트렌디한 효과) */
   &:hover {
     transform: translateY(-8px);
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-    border-color: var(--sub-color);
   }
   /* 활성 상태 (클릭 중) */
   &:active {
@@ -105,7 +101,7 @@ const randomQuestions = computed(() => {
     .agent-name {
       font-size: 1.4rem; /* 20px */
       font-weight: 700;
-      color: $text-primary;
+      color: $primary-text;
       margin-top: 5px;
     }
     // 기본 불렛 제거
@@ -117,7 +113,7 @@ const randomQuestions = computed(() => {
       .faq {
         width: 100%;
         font-size: 11.5px;
-        color: $text-primary;
+        color: $primary-text;
         line-height: 1.2;
         padding: 8px 23px;
         background-color: $white;

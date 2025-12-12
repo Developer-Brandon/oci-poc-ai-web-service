@@ -15,12 +15,10 @@
       <div class="agent-icon-wrapper">
         <CommonIcon :src="cardThumbnailUrl" :size="100" />
       </div>
-
       <!-- 에이전트 이름 -->
       <h3 class="agent-name">
         {{ cardInfo.title }}
       </h3>
-
       <!-- 에이전트 설명 -->
       <p class="agent-description">
         {{ cardInfo.explain }}
@@ -71,7 +69,6 @@ const selectAgent = () => {
 
   /* 접근성: 키보드 네비게이션 포커스 표시 */
   &:focus-visible {
-    outline: 2px solid var(--sub-color);
     outline-offset: 2px;
   }
 
@@ -79,7 +76,6 @@ const selectAgent = () => {
   &:hover {
     transform: translateY(-8px);
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-    border-color: var(--sub-color);
   }
 
   /* 활성 상태 (클릭 중) */
@@ -89,11 +85,7 @@ const selectAgent = () => {
 
   .card-background {
     /* 그라데이션 배경 (선택사항) */
-    background: linear-gradient(
-      135deg,
-      rgba(var(--primary-color), 0.02) 0%,
-      rgba(var(--sub-color), 0.02) 100%
-    );
+    background: $white;
     pointer-events: none;
   }
 
@@ -114,14 +106,14 @@ const selectAgent = () => {
       /* 에이전트 이름 */
       font-size: 1.5rem; /* 20px */
       font-weight: 700;
-      color: $text-primary;
+      color: $primary-text;
       margin: 0.5rem 0 0 0;
     }
 
     .agent-description {
       /* 에이전트 설명 텍스트 */
       font-size: 1rem; /* 14px */
-      color: $text-secondary;
+      color: $secondary-text;
       line-height: 1.6;
       margin: 0;
       white-space: pre-wrap; /* 줄바꿈 유지 */
@@ -135,11 +127,6 @@ const selectAgent = () => {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: linear-gradient(
-    135deg,
-    rgba(var(--color-primary), 0.1) 0%,
-    rgba(var(--sub-color), 0.1) 100%
-  );
   display: flex;
   align-items: center;
   justify-content: center;

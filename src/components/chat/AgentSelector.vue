@@ -87,7 +87,7 @@ const selectAgent = (agent) => {
   padding: var.$spacing-3 var.$spacing-4;
   border: 2px solid var.$gray-200;
   border-radius: var.$border-radius-lg;
-  background-color: var.$bg-primary;
+  background-color: var.$white;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
@@ -102,11 +102,11 @@ const selectAgent = (agent) => {
 }
 
 .agent-selector-label {
-  color: var.$text-primary;
+  color: var.$primary-text;
 }
 
 .agent-selector-chevron {
-  color: var.$text-muted;
+  color: var.$secondary-text;
   font-size: 0.75rem;
   transition: transform 0.3s ease;
 }
@@ -117,7 +117,7 @@ const selectAgent = (agent) => {
   left: 0;
   right: 0;
   margin-top: var.$spacing-2;
-  background-color: var.$bg-primary;
+  background-color: var.$white;
   border: 2px solid var.$gray-200;
   border-radius: var.$border-radius-lg;
   box-shadow: var.$shadow-lg;
@@ -156,17 +156,17 @@ const selectAgent = (agent) => {
 
 .agent-selector-option-name {
   font-weight: 600;
-  color: var.$text-primary;
+  color: var.$primary-text;
 }
 
 .agent-selector-option-usage {
   font-size: var.$font-size-xs;
-  color: var.$text-muted;
+  color: var.$secondary-text;
 }
 
 .agent-selector-option-desc {
   font-size: var.$font-size-sm;
-  color: var.$text-secondary;
+  color: var.$secondary-text;
   line-height: 1.4;
 }
 

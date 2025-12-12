@@ -152,7 +152,7 @@ const handleMessageAction = (action) => {
   justify-content: center;
   height: 100%;
   gap: var.$spacing-4;
-  color: var.$text-muted;
+  color: var.$secondary-text;
   animation: fadeIn 0.5s ease-out;
 }
 

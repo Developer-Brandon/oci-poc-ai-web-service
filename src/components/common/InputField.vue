@@ -311,7 +311,7 @@ const inputType = computed(() => {
   border: none;
   background: transparent;
   font-size: $font-size-base;
-  color: $text-primary;
+  color: $primary-text;
   font-family: $font-primary;
 
   /* 
@@ -333,7 +333,7 @@ const inputType = computed(() => {
   */
   &:-webkit-autofill {
     -webkit-box-shadow: inset 0 0 0 1000px $white;
-    -webkit-text-fill-color: $text-primary;
+    -webkit-text-fill-color: $primary-text;
   }
 
   /* 

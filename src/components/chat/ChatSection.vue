@@ -242,7 +242,7 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: var.$bg-primary;
+  background-color: var.$white;
   border-radius: var.$border-radius-lg;
   overflow: hidden;
   box-shadow: var.$shadow-base;

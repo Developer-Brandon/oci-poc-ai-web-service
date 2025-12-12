@@ -146,7 +146,7 @@ const formatTime = (timestamp) => {
   &--ai {
     .chat-message__content {
       background-color: var.$gray-100;
-      color: var.$text-primary;
+      color: var.$primary-text;
       border-radius: var.$border-radius-base var.$border-radius-lg
         var.$border-radius-lg var.$border-radius-base;
     }
@@ -228,7 +228,7 @@ const formatTime = (timestamp) => {
 /* ==================== 타임스탬프 ==================== */
 .chat-message__timestamp {
   font-size: var.$font-size-xs;
-  color: var.$text-muted;
+  color: var.$secondary-text;
   margin-top: var.$spacing-1;
 }
 

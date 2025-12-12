@@ -278,7 +278,7 @@ defineEmits(["update:modelValue"]);
   라벨 텍스트
 */
 .checkbox-text {
-  color: $text-primary;
+  color: $primary-text;
   font-size: $font-size-sm;
   font-weight: $font-weight-normal;
 

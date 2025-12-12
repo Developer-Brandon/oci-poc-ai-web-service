@@ -112,7 +112,7 @@ const formatFileSize = (bytes) => {
   align-items: center;
   gap: var.$spacing-2;
   padding: var.$spacing-2 var.$spacing-3;
-  background-color: var.$bg-primary;
+  background-color: var.$white;
   border: 1px solid var.$gray-200;
   border-radius: var.$border-radius-base;
   flex: 1;
@@ -141,7 +141,7 @@ const formatFileSize = (bytes) => {
 .file-attachment-name {
   font-size: var.$font-size-sm;
   font-weight: 600;
-  color: var.$text-primary;
+  color: var.$primary-text;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -149,7 +149,7 @@ const formatFileSize = (bytes) => {
 
 .file-attachment-size {
   font-size: var.$font-size-xs;
-  color: var.$text-muted;
+  color: var.$secondary-text;
 }
 
 .file-attachment-remove {
@@ -157,7 +157,7 @@ const formatFileSize = (bytes) => {
   border: none;
   cursor: pointer;
   font-size: 1.2rem;
-  color: var.$text-muted;
+  color: var.$secondary-text;
   padding: var.$spacing-1;
   border-radius: var.$border-radius-base;
   transition: all 0.2s ease;

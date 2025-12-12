@@ -9,7 +9,7 @@
     <section class="card-list-section no-drag">
       <section class="card-list-section__greeting">
         <p class="card-list-section__greeting__text">
-          ✨자주 사용하는 AI Agent
+          <span class="grow-anim">✨</span>자주 사용하는 AI Agent
         </p>
       </section>
       <section class="card-list-section__inner">
@@ -88,10 +88,9 @@ onMounted(() => {
 /* 메인 콘텐츠 영역 */
 .main-content {
   flex: 1;
-  padding: 2rem 1rem; /* 48px top/bottom, 32px left/right */
+  padding: 3rem 1rem; /* 48px top/bottom, 32px left/right */
   max-width: 1200px; /* 최대 너비 제한 */
   margin: 0 auto; /* 중앙 정렬 */
-  margin-top: 3.5rem;
   width: 100%;
 
   /* 반응형: 모바일 화면 */
@@ -114,12 +113,14 @@ onMounted(() => {
   &__greeting {
     width: 984px;
     margin: 0 auto;
+    color: $primary-text;
     &__text {
-      animation: textGlow 1.5s ease-in-out infinite; // 3s → 1.5s
       text-align: left;
-      color: #686868;
       font-size: 25px;
       font-weight: 500;
+    }
+    .grow-anim {
+      animation: textGlow 1s ease-in-out infinite; // 3s → 1.5s
     }
   }
   &__inner {

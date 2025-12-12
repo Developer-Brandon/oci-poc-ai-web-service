@@ -544,7 +544,9 @@ export const useConfigStore = defineStore("config", () => {
     const themeValues = {
       "--login-pannel-image": `url(${loginPannelImageUrl.value})`,
       "--primary-color": mainColorHexCode.value,
+      "--primary-hover-color": mainHoverColorHexCode.value,
       "--sub-color": subColorHexCode.value,
+      "--sub-hover-color": subHoverColorHexCode.value,
     };
 
     // 실제 DOM에 스타일 적용

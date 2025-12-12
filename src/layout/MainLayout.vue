@@ -105,7 +105,7 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-@use "@/assets/styles/whole_variables.scss" as var;
+@use "@/assets/styles/whole_variables.scss" as *;
 
 /* ==================== MainLayout 전체 구조 ==================== */
 .main-layout {
@@ -126,7 +126,7 @@ onMounted(() => {
    * ✅ 동적 그래디언트 배경
    * 
    * 이전 (고정 색상):
-   * background-color: var.$bg-primary;
+   * background-color: $white;
    * 
    * 현재 (동적 그래디언트):
    * :style="gradientObject"를 통해 런타임에 적용
@@ -164,15 +164,15 @@ onMounted(() => {
   }
 
   &::-webkit-scrollbar-track {
-    background: var.$gray-100;
+    background: $gray-100;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: var.$gray-300;
+    background: $gray-300;
     border-radius: 4px;
 
     &:hover {
-      background: var.$gray-400;
+      background: $gray-400;
     }
   }
 }

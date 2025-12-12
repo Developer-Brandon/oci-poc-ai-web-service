@@ -46,7 +46,7 @@ defineEmits(["insert-agent", "attach-file", "close"]);
 .context-menu {
   position: fixed;
   z-index: var.$z-popover;
-  background-color: var.$bg-primary;
+  background-color: var.$white;
   border: 1px solid var.$gray-200;
   border-radius: var.$border-radius-lg;
   box-shadow: var.$shadow-lg;
@@ -64,7 +64,7 @@ defineEmits(["insert-agent", "attach-file", "close"]);
   gap: var.$spacing-3;
   padding: var.$spacing-2 var.$spacing-4;
   font-size: var.$font-size-sm;
-  color: var.$text-primary;
+  color: var.$primary-text;
   text-align: left;
   transition: all 0.2s ease;
 

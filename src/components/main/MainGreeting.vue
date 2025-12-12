@@ -30,7 +30,8 @@ const authStore = useAuthStore();
   display: flex;
   flex-direction: column;
   gap: 0.875rem; /* 16px 정도의 간격 */
-  margin-bottom: 3rem; /* 에이전트 카드와의 거리 */
+  margin-top: 4rem;
+  margin-bottom: 6rem; /* 에이전트 카드와의 거리 */
   text-align: center;
   cursor: default;
   user-select: none;
@@ -40,7 +41,7 @@ const authStore = useAuthStore();
 .greeting-title {
   font-size: 2.5rem; /* 32px */
   font-weight: 350;
-  color: $text-primary;
+  color: $primary-text;
   margin: 0;
   letter-spacing: -0.02em; /* 타이포그래피 개선 */
   transition: color 0.3s ease; /* 트렌디한 hover 효과 */
@@ -53,7 +54,7 @@ const authStore = useAuthStore();
 .greeting-description {
   font-size: 1.2rem; /* 16px */
   font-weight: 400;
-  color: $text-secondary;
+  color: $secondary-text;
   margin: 0;
   line-height: 1.5;
   opacity: 0.8;

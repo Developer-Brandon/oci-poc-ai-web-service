@@ -374,7 +374,7 @@ onMounted(() => {
   align-items: center;
   width: 100%;
   height: 100vh;
-  background-color: $bg-secondary;
+  background-color: $gray-200;
 
   @media (max-width: $breakpoint-phone) {
     flex-direction: column;
@@ -391,7 +391,7 @@ onMounted(() => {
     display: flex;
     width: 970px;
     height: 600px;
-    background-color: $bg-primary;
+    background-color: $white;
     border-radius: 25px;
     box-shadow: 0 4px 12px rgba($black, 0.1);
     /* 
@@ -451,14 +451,14 @@ onMounted(() => {
 .login-title {
   font-size: $font-size-5xl;
   font-weight: $font-weight-bold;
-  color: $text-primary;
+  color: $primary-text;
   margin-bottom: $spacing-5;
   animation: fadeInDown 0.6s ease-out 0.2s both;
 }
 
 .login-subtitle {
   font-size: $font-size-xl;
-  color: $text-secondary;
+  color: $secondary-text;
   line-height: 1.6;
   animation: fadeInUp 0.6s ease-out 0.3s both;
 }
@@ -543,7 +543,7 @@ onMounted(() => {
   gap: $spacing-xs;
   text-align: center;
   font-size: $font-size-sm;
-  color: $text-secondary;
+  color: $secondary-text;
 
   animation: fadeIn 0.5s ease-out 0.6s both;
 }
