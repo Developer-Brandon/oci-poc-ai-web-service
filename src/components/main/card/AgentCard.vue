@@ -234,14 +234,14 @@ const selectAgent = () => {
  * ========================================
  * SCSS 스타일
  * ========================================
- * 
+ *
  * 구조:
  * 1. .agent-card - 메인 컨테이너 (공통 스타일)
  * 2. .card-background - 배경 효과
  * 3. .card-content - 콘텐츠 컨테이너 (normal 타입)
  * 4. .agent-icon-wrapper - 아이콘 원형 배경
  * 5. .faq-list - FAQ 질문 리스트 (faq 타입)
- * 
+ *
  * SCSS @use:
  * - @use로 import한 변수들은 네임스페이스를 통해 접근
  * - $primary-text, $secondary-text 등 변수 사용
@@ -255,18 +255,18 @@ const selectAgent = () => {
 
 /**
  * 공통 스타일 (모든 카드 타입)
- * 
+ *
  * 특징:
  * - width: 315px, height: 250px (고정 크기)
  * - border-radius: 1rem (16px 둥근 모서리)
  * - cursor: pointer (클릭 가능 표시)
  * - perspective: 1000px (3D 효과 준비)
- * 
+ *
  * 호버 애니메이션:
  * - transform: translateY(-8px) (위로 떠오르는 효과)
  * - box-shadow 확대 (깊이감 증가)
  * - cubic-bezier(0.34, 1.56, 0.64, 1) (탄성있는 애니메이션)
- * 
+ *
  * 활성 상태:
  * - transform: translateY(-4px) (호버보다 낮은 높이)
  */
@@ -322,10 +322,10 @@ const selectAgent = () => {
 
 /**
  * 카드 배경 (normal 타입에만 사용)
- * 
+ *
  * 현재: 단순 흰색 배경
  * 추후: 그라데이션 배경으로 확장 가능
- * 
+ *
  * pointer-events: none
  * - 클릭 이벤트가 이 요소를 통과하여 상위 요소에 전달되도록 설정
  */
@@ -338,12 +338,12 @@ const selectAgent = () => {
 
 /**
  * 카드 내용 래퍼 (normal 타입용 기본 구조)
- * 
+ *
  * 공통 스타일:
  * - position: relative, z-index: 1 (배경 위에 표시)
  * - flexbox로 세로 중앙 정렬
  * - padding으로 내부 여백
- * 
+ *
  * normal 타입: 아이콘 + 제목 + 설명
  * faq 타입: 제목 + 질문 리스트 (배경색 동적) - .agent-card--faq에서 오버라이드
  */
@@ -358,13 +358,22 @@ const selectAgent = () => {
   gap: $spacing-4; /* 1rem = 16px */
   width: 100%;
   height: 100%;
+  /* 반응형: 노트북: 1441px ~ 1920px */
+  @media (min-width: 769px) and (max-width: 1920px) {
+    padding: $spacing-10; /* 1.5rem = 24px */
+  }
+
+  /* 반응형: 태블릿 (768px ~ 1024px) */
+  @media (max-width: 768px) {
+    //
+  }
 }
 
 /* ==================== Normal 타입 스타일 ==================== */
 
 /**
  * Normal 타입 전용 스타일
- * 
+ *
  * .agent-card (normal):
  *   └─ .card-content
  *      ├─ .agent-icon-wrapper
@@ -396,6 +405,15 @@ const selectAgent = () => {
   color: $primary-text;
   margin: $spacing-2 0 0 0;
   line-height: 1.3;
+  /* 반응형: 노트북: 1441px ~ 1920px */
+  @media (min-width: 769px) and (max-width: 1920px) {
+    font-size: $font-size-2xl; /* 1.25rem = 20px */
+  }
+
+  /* 반응형: 태블릿 (768px ~ 1024px) */
+  @media (max-width: 768px) {
+    font-size: $font-size-xl; /* 1.25rem = 20px */
+  }
 }
 
 /* 설명 텍스트 (normal 타입만) */
@@ -406,15 +424,23 @@ const selectAgent = () => {
   margin: 0;
   white-space: pre-wrap; /* 줄바꿈 유지 */
   word-break: keep-all; /* 단어 단위로 줄바꿈 */
+  @media (min-width: 769px) and (max-width: 1920px) {
+    font-size: $font-size-xl; /* 1.25rem = 20px */
+  }
+
+  /* 반응형: 태블릿 (768px ~ 1024px) */
+  @media (max-width: 768px) {
+    font-size: $font-size-xl; /* 1.25rem = 20px */
+  }
 }
 
 /* ==================== FAQ 타입 전용 스타일 (.agent-card--faq) ==================== */
 
 /**
  * FAQ 타입 카드 특화 스타일
- * 
+ *
  * 기존 FQuestionAgent.vue의 구조를 정확하게 복원:
- * 
+ *
  * .agent-card--faq (배경색 동적 적용)
  *   └─ .card-content
  *      ├─ .agent-name (1.4rem)
@@ -423,7 +449,7 @@ const selectAgent = () => {
  *         ├─ .faq
  *         ├─ .faq
  *         └─ .faq
- * 
+ *
  * 중요!
  * - .agent-card--faq는 background-color를 배경에서 받음
  * - .card-content 내부에 모든 스타일이 중첩됨
@@ -447,11 +473,13 @@ const selectAgent = () => {
     width: 100%;
     height: 100%;
     margin-top: -1px; /* 기존 코드 그대로 유지 (미세 조정) */
-
+    @media (min-width: 769px) and (max-width: 1920px) {
+      padding: $spacing-10; /* 1.5rem = 24px */
+    }
     /* ==================== FAQ 제목 ==================== */
     /**
      * FAQ 제목 스타일
-     * 
+     *
      * 기존 코드:
      * - font-size: 1.4rem (20px) - normal 타입의 $font-size-xl과 다름
      * - color: $primary-text
@@ -468,7 +496,7 @@ const selectAgent = () => {
     /* ==================== FAQ 질문 리스트 ==================== */
     /**
      * FAQ 질문 컨테이너
-     * 
+     *
      * 기존 코드 구조:
      * - list-style: none (불릿 제거)
      * - padding: 0
@@ -485,7 +513,7 @@ const selectAgent = () => {
       /* ==================== 각 FAQ 항목 (.faq) ==================== */
       /**
        * FAQ 질문 항목 스타일
-       * 
+       *
        * ⭐ 정확한 스타일:
        * - width: 100%
        * - font-size: 11.5px (정확히 11.5px!)
@@ -499,12 +527,12 @@ const selectAgent = () => {
        * - text-overflow: ellipsis
        * - white-space: nowrap
        * - display: block
-       * 
+       *
        * ⭐ 호버 상태:
        * - color: $white
        * - background-color: var(--primary-color)
        * - transition: $transition-base (0.3s ease)
-       * 
+       *
        * ⚠️ 주의: gap 없음! (기존 코드와 동일)
        * 각 항목 사이의 간격은 padding만으로 관리
        */
@@ -524,7 +552,7 @@ const selectAgent = () => {
 
         /**
          * FAQ 항목 호버
-         * 
+         *
          * 기존 코드:
          * - color: $white
          * - background-color: var(--primary-color)
@@ -545,7 +573,7 @@ const selectAgent = () => {
 /**
  * 태블릿 이상 (768px):
  * - 기본 스타일 유지
- * 
+ *
  * 추후 추가 가능:
  * @media (max-width: $breakpoint-tablet) {
  *   .agent-card {

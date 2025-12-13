@@ -125,8 +125,11 @@ onUnmounted(() => {
   grid-template-rows: 1fr;
 
   width: 100%;
-  height: 100%;
-  overflow: hidden;
+  height: 100%; /* ⭐ 세로 꽉 차게 */
+  min-height: 0; /* ⭐ 중요 */
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
 
   /* Grid 열 크기 변경 시 부드러운 애니메이션 */
   transition: grid-template-columns 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -194,17 +197,27 @@ onUnmounted(() => {
 /* ==================== 메인 콘텐츠 영역 ==================== */
 
 .content-area {
-  grid-column: 1 / -1;
+  /* 
+    Grid의 두 번째 셀 (또는 첫 번째 셀 모바일)
+  */
+  grid-column: 2 / 3; // 만약, 데스크톱 해상도에서 밀리지 않길 원한다면  1 / -1로 설정한다
   grid-row: 1 / 2;
 
+  /* 스크롤 가능 */
   overflow-y: auto;
   overflow-x: hidden;
-
+  /* 마진/패딩 제거 */
   margin: 0;
   padding: 0;
-
   transition: grid-column 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
+  /* ✅ 세로 중앙 정렬 추가 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* 세로 중앙 정렬 */
+  align-items: stretch; /* ✅ 가로는 늘려서 기본 정렬 유지 */
+
+  /* 스크롤바 스타일 */
   &::-webkit-scrollbar {
     width: 8px;
   }
@@ -228,8 +241,23 @@ onUnmounted(() => {
   }
 }
 
-/* ==================== 초소형 모바일 (640px 이하) ==================== */
+/* Tablet/Mobile (1024px 이하) */
+@media (max-width: 768px) {
+  .main-layout {
+    /* 1열로 변경 */
+    grid-template-columns: 2fr;
+    .main-sidebar {
+      grid-column: 1 / 2;
+    }
+  }
 
+  .content-area {
+    /* 첫 번째 열 */
+    grid-column: 2 / 2;
+  }
+}
+
+/* ==================== 초소형 모바일 (640px 이하) ==================== */
 @media (max-width: 640px) {
   .sidebar-toggle-btn {
     width: 36px;
