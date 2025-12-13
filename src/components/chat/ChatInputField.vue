@@ -440,8 +440,8 @@ onMounted(() => {
    * - Vue3: 직접 DOM 요소에 이벤트 바인딩 가능하지만,
    *         전역 document 리스너는 여전히 필요함
    */
+  // 🎯 드롭다운 관련 요소들을 클릭한 경우 무시
   const handleDocumentClick = (event) => {
-    // 🎯 드롭다운 관련 요소들을 클릭한 경우 무시
     const clickedElement = event.target;
     const isInsideModelBadge = clickedElement.closest(".model-badge");
     const isInsideCustomDropdown = clickedElement.closest(".custom-dropdown");
@@ -528,6 +528,7 @@ onMounted(() => {
   background-color: var(--primary-color) !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.08); /* 먼 그림자 */
   &__text {
+    //
   }
   color: $white;
   &:hover {
@@ -536,12 +537,10 @@ onMounted(() => {
       transform: rotate(-80deg) scale(2);
     }
   }
-
   &:active {
     transform: scale(0.98);
   }
 }
-
 .ai-agent-icon {
   font-size: 1rem;
 }
@@ -551,7 +550,6 @@ onMounted(() => {
   display: flex;
   justify-content: flex-end; // 🔥 오른쪽 정렬
   width: 100%; // 필요 시
-
   .action-icons-group {
     display: flex;
     gap: $spacing-2;

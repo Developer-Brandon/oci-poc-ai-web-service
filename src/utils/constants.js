@@ -186,14 +186,14 @@ export const IMAGE_UPLOAD = {
  *
  * 예시 (.env):
  * VITE_API_URL=http://localhost:8000
- * VITE_APP_NAME=OCI AI Web Service
+ * VITE_APP_NAME=AI Web Service
  */
 export const ENV = {
   BASE_API_URL: import.meta.env.VITE_API_URL || "http://localhost:5173",
-  BASE_APP_NAME: import.meta.env.VITE_APP_NAME || "AI Packaging",
+  BASE_APP_NAME: import.meta.env.VITE_APP_NAME || "Packaging.AI",
   NODE_ENV: import.meta.env.MODE, // 'development' 또는 'production'
   IS_PRODUCTION: import.meta.env.PROD,
   IS_DEVELOPMENT: import.meta.env.DEV,
-  LOGIN_PAGE_TITLE: "AI Packaging - 로그인",
-  MAIN_PAGE_TITLE: "AI Packaging - 메인",
+  LOGIN_PAGE_TITLE: "Packaging.AI - 로그인",
+  MAIN_PAGE_TITLE: "Packaging.AI - 메인",
 };

@@ -1,19 +1,52 @@
+<!-- src/components/sidebar/MainSidebar.vue -->
 <template>
-  <aside class="sidebar">
-    <!-- ==================== 로고 ==================== -->
+  <!-- 
+    ========================================
+    Mobile Overlay (모바일에서만 표시)
+    ========================================
+    
+    역할:
+    - Mobile에서 Sidebar 외부 영역을 클릭할 때 닫히도록 함
+    - 반투명 배경으로 시각적 피드백 제공
+    - z-index를 sidebar보다 낮게 설정
+  -->
+  <div
+    v-if="isMobileView && isOpen"
+    class="sidebar-overlay"
+    @click="closeSidebar"
+  />
+
+  <!-- 
+    ========================================
+    Main Sidebar Component
+    ========================================
+    
+    Desktop (1024px 이상):
+    - Grid 레이아웃의 첫 번째 열로 고정
+    - 항상 표시
+    
+    Mobile (1024px 미만):
+    - Fixed 위치로 변환
+    - is-open 상태에 따라 슬라이드 애니메이션
+    - transform: translateX(-100%) → translateX(0)
+  -->
+  <aside class="sidebar" :class="{ 'sidebar--open': isOpen }">
+    <!-- ==================== 로고 섹션 ==================== -->
     <div class="sidebar__header">
       <div class="sidebar__logo">
         <img
           :src="configStore.logoImageUrl"
-          alt="AI Packaging Logo"
+          alt="Packaging.AI Logo"
           class="sidebar__logo-image"
         />
       </div>
     </div>
+
     <!-- ==================== 새 채팅 버튼 ==================== -->
     <button class="sidebar__new-chat-btn" @click="startNewChat">
       <span class="sidebar__new-chat-text">새 채팅</span>
     </button>
+
     <!-- ==================== 검색창 ==================== -->
     <div class="sidebar__search">
       <input
@@ -28,6 +61,7 @@
         src="@/assets/images/icon/reading_grasses.png"
       />
     </div>
+
     <!-- ==================== 채팅 히스토리 섹션 ==================== -->
     <div class="sidebar__history">
       <!-- 채팅이 있는 경우 -->
@@ -72,6 +106,7 @@
                 @click.stop
                 placeholder="새로운 제목 입력..."
               />
+
               <!-- 호버 시 우측 메뉴 버튼 -->
               <div class="sidebar__chat-actions">
                 <!-- 편집 모드가 아닐 때만 메뉴 버튼 표시 -->
@@ -99,7 +134,6 @@
     <div class="sidebar__footer">
       <!-- 사용자 프로필 -->
       <button class="sidebar__user-profile">
-        <!-- @click.stop="showUserMenu($event)" -->
         <img
           :src="configStore.defaultProfileImage"
           alt="프로필"
@@ -160,7 +194,6 @@
   <!-- =============== 우측 메뉴 (Context Menu) - 사용자 메뉴 =============== -->
   <Teleport to="body" v-if="userMenu.isVisible">
     <div class="sidebar__context-menu-overlay" />
-    <!-- @click="closeUserMenu"  -->
     <div
       class="sidebar__context-menu"
       :style="{
@@ -168,14 +201,8 @@
         left: userMenu.position.left,
       }"
     >
-      <!-- 메뉴 항목: 계정 정보 -->
-      <!-- <button class="sidebar__context-menu-item">
-        <span class="sidebar__context-menu-text">계정 정보</span>
-      </button> -->
-
       <!-- 메뉴 항목: 로그아웃 -->
       <button class="sidebar__context-menu-item" @click="logout()">
-        <!-- closeUserMenu(); -->
         <span class="sidebar__context-menu-text">로그아웃</span>
       </button>
     </div>
@@ -183,6 +210,30 @@
 </template>
 
 <script setup>
+/**
+ * ========================================
+ * MainSidebar.vue - 좌측 사이드바 컴포넌트
+ * ========================================
+ *
+ * 기능:
+ * 1. 채팅 목록 표시 및 관리
+ * 2. 새 채팅 생성
+ * 3. 채팅 검색
+ * 4. 채팅 편집/삭제
+ * 5. 사용자 정보 표시
+ * 6. 로그아웃
+ *
+ * 반응형:
+ * - Desktop (1024px 이상): 항상 표시
+ * - Mobile (1024px 미만): 모달로 동작 (슬라이드 애니메이션)
+ *
+ * Props:
+ * - is-open: 모바일에서 사이드바 열림 상태
+ *
+ * Emits:
+ * - close: 사이드바 닫기 요청
+ */
+
 import { ref, computed, onMounted, nextTick, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
@@ -190,12 +241,52 @@ import { useConfigStore } from "@/stores/configStore";
 import garbageIcon from "@/assets/images/icon/garbage.png";
 import pencilIcon from "@/assets/images/icon/pencil.png";
 
+/* ==================== Props & Emits ==================== */
+
+/**
+ * Props 정의
+ *
+ * is-open: 모바일에서 사이드바 표시 여부
+ * - 부모(MainLayout.vue)에서 제어
+ * - Desktop: 항상 true (표시 안 함, Grid로 표시)
+ * - Mobile: 토글 가능
+ */
+defineProps({
+  isOpen: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+/**
+ * Emits 정의
+ *
+ * close: 사이드바 닫기 요청
+ * - 모바일에서 사이드바 닫기 버튼 클릭
+ * - 사이드바 외부(overlay) 클릭
+ * - 메뉴 항목 선택 시
+ */
+const emit = defineEmits(["close"]);
+
 /* ==================== 라우터 및 스토어 ==================== */
 const router = useRouter();
 const authStore = useAuthStore();
 const configStore = useConfigStore();
 
 /* ==================== 반응형 상태 (State) ==================== */
+
+/**
+ * isMobileView: 모바일 화면 여부
+ *
+ * 값:
+ * - true: 1024px 미만 (모바일/태블릿)
+ * - false: 1024px 이상 (데스크톱/랩톱)
+ *
+ * 용도:
+ * - overlay 표시 여부 결정
+ * - 모바일에서만 overlay와 애니메이션 표시
+ */
+const isMobileView = ref(false);
 
 const searchQuery = ref("");
 const activeChatId = ref(null);
@@ -220,46 +311,18 @@ const chatSections = ref([
   },
 ]);
 
-/* ==================== 우측 메뉴 (Context Menu) 상태 - 채팅 ==================== */
-
-/**
- * contextMenu: 우측 메뉴 표시 상태 (채팅용)
- *
- * 상태 정보:
- * - isVisible: 메뉴 표시 여부
- * - chatId: 메뉴가 열린 채팅 ID
- * - position: 메뉴 위치 (top, left)
- */
 const contextMenu = ref({
   isVisible: false,
   chatId: null,
   position: { top: "0px", left: "0px" },
 });
 
-/* ==================== 우측 메뉴 (Context Menu) 상태 - 사용자 메뉴 ==================== */
-
-/**
- * userMenu: 우측 메뉴 표시 상태 (사용자 프로필용)
- *
- * 상태 정보:
- * - isVisible: 메뉴 표시 여부
- * - position: 메뉴 위치 (top, left)
- */
 const userMenu = ref({
   isVisible: false,
   position: { top: "0px", left: "0px" },
 });
 
-/**
- * editingChatId: 현재 편집 중인 채팅 ID
- * - null: 편집 모드가 아님
- * - number: 편집 중인 채팅의 ID
- */
 const editingChatId = ref(null);
-
-/**
- * editingTitle: 편집 중인 제목 (임시 저장)
- */
 const editingTitle = ref("");
 
 /* ==================== 계산된 속성 (Computed) ==================== */
@@ -285,6 +348,27 @@ const filteredChatSections = computed(() => {
 
 /* ==================== 메서드 (Methods) ==================== */
 
+/**
+ * closeSidebar: 사이드바 닫기
+ *
+ * 부모 컴포넌트(MainLayout.vue)에 close 이벤트 발생
+ * MainLayout에서 isSidebarOpen을 false로 설정
+ */
+const closeSidebar = () => {
+  console.log("📱 Sidebar 닫기 요청");
+  emit("close");
+};
+
+/**
+ * startNewChat: 새 채팅 시작
+ *
+ * 동작:
+ * 1. 새 ID 생성 (기존 채팅의 최대 ID + 1)
+ * 2. 새 채팅 객체 생성
+ * 3. "오늘" 섹션에 추가
+ * 4. 새 채팅 선택 (activeChatId 업데이트)
+ * 5. 검색어 초기화
+ */
 const startNewChat = () => {
   console.log("✨ 새 채팅 시작");
 
@@ -306,15 +390,44 @@ const startNewChat = () => {
 
   activeChatId.value = newChat.id;
   searchQuery.value = "";
+
+  // 모바일: 새 채팅 후 Sidebar 자동 닫기
+  if (isMobileView.value) {
+    closeSidebar();
+  }
 };
 
+/**
+ * selectChat: 채팅 선택
+ *
+ * @param {Object} chat - 선택할 채팅 객체
+ *
+ * 동작:
+ * 1. 선택한 채팅의 ID를 activeChatId로 설정
+ * 2. 모바일: Sidebar 자동 닫기
+ */
 const selectChat = (chat) => {
   console.log("📖 채팅 선택:", chat.title);
   activeChatId.value = chat.id;
+
+  // 모바일: 채팅 선택 후 Sidebar 자동 닫기
+  if (isMobileView.value) {
+    closeSidebar();
+  }
 };
 
+/**
+ * deleteChat: 채팅 삭제
+ *
+ * @param {number} chatId - 삭제할 채팅 ID
+ *
+ * 동작:
+ * 1. 삭제 확인 대화
+ * 2. 모든 섹션에서 해당 채팅 제거
+ * 3. 삭제된 채팅이 활성 채팅이었다면 activeChatId 초기화
+ */
 const deleteChat = (chatId) => {
-  console.log("채팅 더보기:", chatId);
+  console.log("🗑️ 채팅 삭제:", chatId);
 
   if (confirm("이 채팅을 삭제하시겠습니까?")) {
     chatSections.value = chatSections.value.map((section) => ({
@@ -332,30 +445,26 @@ const handleSearch = () => {
   console.log("🔍 검색:", searchQuery.value);
 };
 
+/**
+ * logout: 로그아웃
+ *
+ * 동작:
+ * 1. authStore에서 로그아웃
+ * 2. /login 페이지로 라우팅
+ */
 const logout = () => {
   console.log("🚪 로그아웃");
   authStore.logout();
   router.push("/login");
 };
 
-/* ==================== 채팅 메뉴 메서드 ==================== */
+/* ==================== Context Menu 메서드 ==================== */
 
-/**
- * showContextMenu: 우측 메뉴 표시 (채팅용)
- *
- * @param {Event} event - 마우스 클릭 이벤트
- * @param {number} chatId - 메뉴를 열 채팅 ID
- *
- * 동작 흐름:
- * 1. 기본 우측클릭 메뉴 방지
- * 2. 마우스 위치 기반 메뉴 좌표 계산
- * 3. 새 메뉴 열기
- */
 const showContextMenu = (event, chatId) => {
   event.preventDefault();
   event.stopPropagation();
 
-  console.log("📋 우측 메뉴 열기:", chatId);
+  console.log("📋 Context Menu 열기:", chatId);
 
   contextMenu.value = {
     isVisible: true,
@@ -367,26 +476,11 @@ const showContextMenu = (event, chatId) => {
   };
 };
 
-/**
- * closeContextMenu: 우측 메뉴 닫기 (채팅용)
- */
 const closeContextMenu = () => {
   contextMenu.value.isVisible = false;
   contextMenu.value.chatId = null;
 };
 
-/**
- * startEditingChat: 채팅 제목 편집 시작
- *
- * @param {number} chatId - 편집할 채팅 ID
- * @param {string} currentTitle - 현재 제목
- *
- * 동작:
- * 1. 편집 모드 활성화
- * 2. 현재 제목을 임시 저장
- * 3. 메뉴 닫기
- * 4. 자동으로 input 포커스 (Vue3 nextTick 사용)
- */
 const startEditingChat = (chatId, currentTitle) => {
   console.log("✏️ 채팅 편집 시작:", chatId);
 
@@ -394,7 +488,6 @@ const startEditingChat = (chatId, currentTitle) => {
   editingTitle.value = currentTitle;
   closeContextMenu();
 
-  // Vue3에서 DOM 업데이트 후 input 포커스
   nextTick(() => {
     const input = document.querySelector(
       `.sidebar__chat-edit-input[data-chat-id="${chatId}"]`
@@ -406,16 +499,6 @@ const startEditingChat = (chatId, currentTitle) => {
   });
 };
 
-/**
- * saveEditingChat: 채팅 제목 저장
- *
- * @param {number} chatId - 저장할 채팅 ID
- *
- * 동작:
- * 1. 입력값 유효성 검사 (공백 제거)
- * 2. 제목 업데이트
- * 3. 편집 모드 해제
- */
 const saveEditingChat = (chatId) => {
   const newTitle = editingTitle.value.trim();
 
@@ -438,25 +521,12 @@ const saveEditingChat = (chatId) => {
   editingTitle.value = "";
 };
 
-/**
- * cancelEditingChat: 채팅 제목 편집 취소
- */
 const cancelEditingChat = () => {
-  console.log("❌ 채팅 제목 편집 취소");
+  console.log("❌ 채팅 편집 취소");
   editingChatId.value = null;
   editingTitle.value = "";
 };
 
-/**
- * handleChatTitleKeydown: 제목 입력 중 키보드 이벤트 처리
- *
- * @param {KeyboardEvent} event
- * @param {number} chatId
- *
- * 키보드 단축키:
- * - Enter: 저장
- * - Escape: 취소
- */
 const handleChatTitleKeydown = (event, chatId) => {
   if (event.key === "Enter") {
     saveEditingChat(chatId);
@@ -465,87 +535,112 @@ const handleChatTitleKeydown = (event, chatId) => {
   }
 };
 
-/* ==================== 사용자 메뉴 메서드 ==================== */
+/* ==================== 윈도우 리사이즈 감지 ==================== */
 
 /**
- * showUserMenu: 우측 메뉴 표시 (사용자 프로필용)
+ * handleWindowResize: 윈도우 리사이즈 시 모바일 여부 업데이트
  *
- * @param {Event} event - 마우스 클릭 이벤트
+ * 1024px 기준:
+ * - 1024px 이상: 데스크톱 (모바일 뷰 아님)
+ * - 1024px 미만: 모바일/태블릿 (모바일 뷰)
  *
- * 동작:
- * 1. 클릭 이벤트 전파 방지
- * 2. 마우스 위치 기반 메뉴 좌표 계산
- * 3. 사용자 메뉴 열기
+ * 역할:
+ * - overlay 표시 여부 결정
+ * - 모바일에서만 overlay와 애니메이션 활성화
  */
-// const showUserMenu = (event) => {
-//   event.preventDefault();
-//   event.stopPropagation();
+const handleWindowResize = () => {
+  const windowWidth = window.innerWidth;
+  isMobileView.value = windowWidth < 1024;
 
-//   console.log("📋 사용자 메뉴 열기");
+  console.log(
+    `📐 윈도우 리사이즈: ${windowWidth}px → 모바일: ${isMobileView.value}`
+  );
+};
 
-//   userMenu.value = {
-//     isVisible: true,
-//     position: {
-//       top: `${event.pageY}px`,
-//       left: `${event.pageX}px`,
-//     },
-//   };
-// };
-
-// /**
-//  * closeUserMenu: 우측 메뉴 닫기 (사용자 메뉴용)
-//  */
-// const closeUserMenu = () => {
-//   console.log("❌ 사용자 메뉴 닫기");
-//   userMenu.value.isVisible = false;
-// };
+/* ==================== 라이프사이클 ==================== */
 
 onMounted(() => {
-  if (configStore.office === "KOMSCO") {
-    const updateMap = {
-      1: "성과 지표는 어떻게 설정되고 검증되..",
-      2: "예산 집행 중 불용 되는 과다 집행 항목..",
-      3: "해외 특허 분쟁 사례 및 후속 조치",
-      4: "매출, 사업 성과, 예산 편성·집행 ...",
-      5: "초과근무 관리 방식, 출장비 증빙 ",
-    };
+  console.log("✅ MainSidebar 마운트됨");
 
-    chatSections.value.forEach((section) => {
-      section.chats.forEach((chat) => {
-        if (updateMap[chat.id]) {
-          chat.title = updateMap[chat.id];
-        }
-      });
-    });
-  }
+  // 1️⃣ 초기 윈도우 크기 확인
+  handleWindowResize();
 
-  // 문서 클릭 시 메뉴 닫기 이벤트 등록
+  // 2️⃣ 리사이즈 리스너 등록
+  window.addEventListener("resize", handleWindowResize);
+
+  // 3️⃣ 문서 클릭 시 context menu 닫기
   document.addEventListener("click", () => {
     closeContextMenu();
-    // closeUserMenu();
   });
+
+  console.log("✅ 이벤트 리스너 등록됨");
 });
 
 onUnmounted(() => {
+  console.log("🗑️ MainSidebar 언마운트됨");
+  window.removeEventListener("resize", handleWindowResize);
   document.removeEventListener("click", closeContextMenu);
-  // document.removeEventListener("click", closeUserMenu);
 });
 </script>
 
 <style scoped lang="scss">
 @use "@/assets/styles/whole_variables.scss" as *;
+@use "@/assets/styles/whole_animations.scss" as *;
 
-/* ==================== SideBar 전체 구조 ==================== */
+/* ==================== Mobile Overlay ==================== */
+
+/**
+ * sidebar-overlay: 모바일에서만 표시되는 반투명 배경
+ *
+ * 역할:
+ * - Sidebar 외부를 클릭할 때 닫히도록 함
+ * - 반투명 배경으로 시각적 피드백
+ * - z-index를 sidebar보다 낮게 설정 (sidebar 뒤)
+ *
+ * 동작:
+ * - v-if="isMobileView && isOpen" → 모바일이면서 열려있을 때만 표시
+ * - @click="closeSidebar" → 클릭 시 닫기
+ */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5); /* 반투명 검은색 */
+  z-index: 998; /* Sidebar(999)보다 아래 */
+  animation: fadeIn 0.3s ease;
+}
+
+/* ==================== Sidebar 전체 구조 ==================== */
+
 .sidebar {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: 100%;
+  width: 250px;
+  height: 100vh;
   background-color: $white;
   border-right: 1px solid $gray-200;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  @media (max-width: 639px) {
+    width: 75vw;
+    max-width: 250px;
+  }
+  /* 기본: 왼쪽으로 숨김 */
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   overflow-y: auto;
 
+  &--open {
+    transform: translateX(0);
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+  }
+
+  /* ==================== 스크롤바 스타일 ==================== */
   &::-webkit-scrollbar {
     width: 6px;
   }
@@ -563,7 +658,7 @@ onUnmounted(() => {
     }
   }
 
-  /* ==================== SideBar Header (로고만) ==================== */
+  /* ==================== Header  ==================== */
   &__header {
     padding: $spacing-5;
     display: flex;
@@ -572,6 +667,7 @@ onUnmounted(() => {
     flex-shrink: 0;
   }
 
+  /* ==================== Logo  ==================== */
   &__logo {
     display: flex;
     align-items: center;
@@ -587,7 +683,7 @@ onUnmounted(() => {
     }
   }
 
-  /* ==================== SideBar NewChat - 새 채팅 버튼 ==================== */
+  /* ==================== New Chat Button ==================== */
   &__new-chat {
     &-btn {
       cursor: pointer;
@@ -624,7 +720,7 @@ onUnmounted(() => {
     }
   }
 
-  /* ==================== SideBar HistoryChat ==================== */
+  /* ==================== History Section ==================== */
   &__history-section {
     margin-bottom: $spacing-4;
 
@@ -638,10 +734,8 @@ onUnmounted(() => {
       margin-bottom: 16px;
     }
   }
-}
 
-/* ==================== 검색창 ==================== */
-.sidebar {
+  /* ==================== 검색창 ==================== */
   &__search {
     position: relative;
     margin: 32px 24px;
@@ -767,6 +861,7 @@ onUnmounted(() => {
   color: $secondary-text;
   border-radius: 4px;
   transition: all 0.2s ease;
+
   &:hover {
     color: $black;
     background-color: $white;
@@ -790,7 +885,7 @@ onUnmounted(() => {
   margin: 0;
 }
 
-/* ==================== SideBar Footer (사용자 정보) ==================== */
+/* ==================== Footer (사용자 정보) ==================== */
 .sidebar__footer {
   padding: $spacing-4;
   border-top: 1px solid $gray-100;
@@ -849,13 +944,6 @@ onUnmounted(() => {
 }
 
 /* ==================== 제목 편집 입력 필드 ==================== */
-
-/**
- * 편집 모드 입력 필드
- *
- * 기존 제목 대신 입력 필드 표시
- * Enter/Escape 키로 제어
- */
 .sidebar__chat-edit-input {
   flex: 1;
   border: none;
@@ -875,12 +963,8 @@ onUnmounted(() => {
   }
 }
 
-/* ==================== 우측 메뉴 (Context Menu) ==================== */
+/* ==================== Context Menu ==================== */
 
-/**
- * Teleport로 생성되는 오버레이
- * 메뉴 외부 클릭 시 메뉴 닫기를 위한 투명 레이어
- */
 .sidebar__context-menu-overlay {
   position: fixed;
   top: 0;
@@ -890,15 +974,6 @@ onUnmounted(() => {
   z-index: $z-popover - 10;
 }
 
-/**
- * 우측 메뉴 컨테이너
- *
- * position: fixed
- * - Teleport로 body에 마운트되므로 fixed 사용
- * - top, left는 JavaScript에서 동적으로 설정
- *
- * z-index: $z-popover (1060)
- */
 .sidebar__context-menu {
   position: fixed;
   z-index: $z-popover;
@@ -915,11 +990,6 @@ onUnmounted(() => {
   min-width: 160px;
 }
 
-/**
- * 우측 메뉴 항목 (버튼)
- *
- * flex 레이아웃으로 아이콘과 텍스트 정렬
- */
 .sidebar__context-menu-item {
   width: 100%;
   background: none;
@@ -944,9 +1014,6 @@ onUnmounted(() => {
   }
 }
 
-/**
- * 메뉴 항목 아이콘
- */
 .sidebar__context-menu-icon {
   font-size: 16px;
   flex-shrink: 0;
@@ -956,11 +1023,19 @@ onUnmounted(() => {
   width: 20px;
 }
 
-/**
- * 메뉴 항목 텍스트
- */
 .sidebar__context-menu-text {
   flex: 1;
   white-space: nowrap;
+}
+// 전역에서 사용하는 animation 보다 다른
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 </style>

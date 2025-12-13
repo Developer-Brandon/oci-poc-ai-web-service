@@ -70,7 +70,7 @@ app.use(router);
  *
  * ⚠️ 주의: 민감한 정보(API 키 등)는 여기에 저장하면 안 됩니다!
  */
-app.config.globalProperties.$appName = "Packaging AI Packaging";
+app.config.globalProperties.$appName = "Packaging Packaging.AI";
 
 /**
  * 추가 전역 프로퍼티 예시 (필요시 추가)

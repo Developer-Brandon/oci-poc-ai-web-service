@@ -396,3 +396,12 @@
     text-shadow: 0 0 15px var(--primary-color);
   }
 }
+
+@keyframes underlineExpand {
+  from {
+    border-bottom-width: 1px;
+  }
+  to {
+    border-bottom-width: 2px;
+  }
+}

@@ -8,7 +8,7 @@
     <div class="loading-content">
       <div class="loading-spinner"></div>
       <p class="loading-text">
-        {{ office }} AI Packaging를 준비하고 있습니다...
+        {{ office }} Packaging.AI를 준비하고 있습니다...
       </p>
     </div>
   </div>

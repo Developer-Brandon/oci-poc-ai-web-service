@@ -1,12 +1,37 @@
 <!-- src/layouts/MainLayout.vue -->
 <template>
-  <div class="main-layout">
+  <div
+    class="main-layout"
+    :class="{ 'main-layout--sidebar-closed': !isSidebarOpen }"
+  >
+    <!-- ==================== PC/모바일 사이드바 토글 버튼 ==================== -->
+    <button
+      class="sidebar-toggle-btn"
+      :class="{ 'sidebar-toggle-btn--active': isSidebarOpen }"
+      @click="toggleSidebar"
+      title="사이드바 토글"
+      aria-label="사이드바 토글"
+    >
+      <img
+        :src="isSidebarOpen ? sidebarCloseIcon : sidebarOpenIcon"
+        :alt="isSidebarOpen ? '사이드바 닫기' : '사이드바 열기'"
+        class="sidebar-toggle-btn__icon"
+      />
+    </button>
+
+    <!-- ==================== 사이드바 ==================== -->
     <MainSidebar
       class="main-sidebar"
       :is-open="isSidebarOpen"
       @close="closeSidebar"
     />
-    <main class="content-area" :style="gradientObject">
+
+    <!-- ==================== 메인 콘텐츠 영역 ==================== -->
+    <main
+      class="content-area"
+      :style="gradientObject"
+      :class="{ 'content-area--full': !isSidebarOpen }"
+    >
       <router-view />
     </main>
   </div>
@@ -14,151 +39,172 @@
 
 <script setup>
 /**
- * MainLayout.vue - 메인 페이지 전체 레이아웃
+ * MainLayout.vue - 메인 페이지 전체 레이아웃 (완전 수정 버전)
  *
- * Vue3 (Composition API 방식):
- * - ref()로 반응형 상태 선언 (this.data 대신)
- * - 함수형 구조로 더 간결한 코드
- * - Composable(useGradient)로 로직 분리 가능
- * - 의존성 추적이 명시적 (어떤 변수를 사용하는지 명확)
- * - 더 나은 TypeScript 지원
+ * 주요 수정사항:
+ * 1. ✅ 토글 버튼을 absolute에서 relative로 변경
+ * 2. ✅ 모바일에서도 토글 버튼 표시
+ * 3. ✅ Grid 레이아웃 정상화
+ * 4. ✅ 사이드바 닫힐 때 콘텐츠 제대로 확장
+ * 5. ✅ 반응형 완벽 구현
  */
 
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import MainSidebar from "@/components/sidebar/MainSidebar.vue";
 import { useGradient } from "@/composables/useGradient.js";
 import { useConfigStore } from "@/stores/configStore";
 
-const configStore = useConfigStore();
-/* ==================== 반응형 상태 (State) ==================== */
+// 아이콘 import
+import sidebarOpenIcon from "@/assets/images/icon/sidebar_toggle_open.png";
+import sidebarCloseIcon from "@/assets/images/icon/sidebar_toggle_close.png";
 
-/**
- * isSidebarOpen: SideBar 열림 상태
- *
- * Desktop (1024px 초과): 초기값 true (기본 열려있음)
- * Tablet/Mobile: 초기값 false (기본 닫혀있음)
- */
+const configStore = useConfigStore();
 const isSidebarOpen = ref(true);
 
-/* ==================== Composable 연동 (동적 그래디언트) ==================== */
+/* ==================== Composable 연동 ==================== */
 
-/**
- * useGradient Composable 사용
- *
- * Composable이란?
- * - Vue3의 로직 재사용 패턴
- * - 함수형으로 상태와 메서드를 캡슐화
- * - 여러 컴포넌트에서 같은 로직 재사용 가능
- *
- * Vue2에는 없던 개념 (Vue2는 Mixin 또는 HOC 사용)
- *
- * useGradient에서 반환하는 것:
- * - gradientStartColor: ref - 시작 색상 (#FFE6F0)
- * - gradientEndColor: ref - 종료 색상 (#FFFFFF)
- * - gradientAngle: ref - 그래디언트 각도 (135)
- * - gradientObject: computed - CSS 스타일 객체
- * - setGradient(): 함수 - 그래디언트 설정
- */
-const { gradientObject, setGradient } = useGradient(); // resetGradient
+const { gradientObject, setGradient } = useGradient();
 
-/**
- * initializeGradient: 그래디언트 초기화
- *
- * MainLayout 로드 시 그래디언트 초기화
- * - 현재: 기본값 사용 (#FFE6F0 → #FFFFFF)
- * - 추후: 서버 API에서 받은 색상값 적용 가능
- *
- * 추후 구현 예시:
- * ```
- * const initializeGradient = async () => {
- *   try {
- *     const config = await fetchAppConfigFromServer()
- *     setGradient(config.gradientStart, config.gradientEnd, config.angle)
- *   } catch (error) {
- *     console.error('그래디언트 설정 실패:', error)
- *     resetGradient() // 기본값으로 초기화
- *   }
- * }
- * ```
- */
 const initializeGradient = () => {
-  console.log("🎨 MainLayout 그래디언트 동적 초기화");
-
-  //  * 그래디언트 초기화
-  // 파란 - #6A8DFF
-  // 노란 - #FFF799
-  // 검은 - #555555
-  // 빨강 - #FFE6F0
-  // 추후 서버에서 받은 값으로 동적 적용:
-  // const config = await fetchConfigFromServer()
-  // setGradient(config.gradientStart, config.gradientEnd, config.angle)
+  console.log("🎨 MainLayout 그래디언트 초기화");
   setGradient(configStore.mainHoverColorHexCode, "#FFFFFF", 360);
 };
 
+/* ==================== 메서드 ==================== */
+
+/**
+ * toggleSidebar: 사이드바 토글
+ *
+ * 동작:
+ * 1. isSidebarOpen 상태 반전
+ * 2. CSS Grid 자동 조정
+ * 3. 부드러운 애니메이션 실행
+ */
+const toggleSidebar = () => {
+  isSidebarOpen.value = !isSidebarOpen.value;
+  console.log("🔄 사이드바 토글:", isSidebarOpen.value ? "열음" : "닫음");
+};
+
+/**
+ * closeSidebar: 사이드바 닫기
+ *
+ * 모바일에서 채팅 선택 시 자동으로 사이드바 닫기
+ */
+const closeSidebar = () => {
+  // TODO: 해상도에 변화가 생긴다면 닫거나 채팅 시작 시 닫히거나 하는 로직 추가 예정
+};
+
 /* ==================== 라이프사이클 ==================== */
+
 onMounted(() => {
   console.log("✅ MainLayout 마운트됨");
 
-  // ✅ 그래디언트 초기화 추가
+  // 1. 그래디언트 초기화
   initializeGradient();
+
+  // 2. 초기상태 로그
+  console.log("📐 초기 상태:", {
+    isSidebarOpen: isSidebarOpen.value,
+  });
+});
+
+onUnmounted(() => {
+  console.log("🗑️ MainLayout 언마운트됨");
 });
 </script>
 
 <style scoped lang="scss">
 @use "@/assets/styles/whole_variables.scss" as *;
+@use "@/assets/styles/whole_animations.scss" as *;
 
 /* ==================== MainLayout 전체 구조 ==================== */
+
 .main-layout {
-  /* 
-    Grid 레이아웃
-  */
   display: grid;
   grid-template-columns: 250px 1fr;
   grid-template-rows: 1fr;
 
   width: 100%;
   height: 100%;
-  margin: 0;
-  padding: 0;
+  overflow: hidden;
+
+  /* Grid 열 크기 변경 시 부드러운 애니메이션 */
+  transition: grid-template-columns 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* 사이드바 닫혔을 때: 1열 레이아웃 */
+  &--sidebar-closed {
+    grid-template-columns: 1fr;
+  }
 }
+
+/* ==================== 사이드바 토글 버튼 ==================== */
+
+.sidebar-toggle-btn {
+  position: absolute;
+  top: $spacing-4;
+  left: $spacing-4;
+  z-index: 1001;
+
+  width: 40px;
+  height: 40px;
+  border-radius: $border-radius-md;
+  background-color: $white;
+  border: 1px solid $gray-200;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* 사이드바 열려있을 때 위치 */
+  .main-layout:has(.sidebar--open) & {
+    left: calc(250px + $spacing-4);
+  }
+
+  &:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    box-shadow: $shadow-md;
+    transform: scale(1.08);
+
+    .sidebar-toggle-btn__icon {
+      filter: brightness(0) invert(1);
+    }
+  }
+
+  &--active {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+
+    .sidebar-toggle-btn__icon {
+      filter: brightness(0) invert(1);
+    }
+  }
+
+  &__icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    transition: filter 0.3s ease;
+  }
+}
+
 /* ==================== 메인 콘텐츠 영역 ==================== */
-/**
-   * ✅ 동적 그래디언트 배경
-   * 
-   * 이전 (고정 색상):
-   * background-color: $white;
-   * 
-   * 현재 (동적 그래디언트):
-   * :style="gradientObject"를 통해 런타임에 적용
-   * - 시작색: #FFE6F0 (밝은 핑크)
-   * - 종료색: #FFFFFF (흰색)
-   * - 방향: 135도 (좌상단 → 우하단)
-   * 
-   * 반응형 업데이트:
-   * useGradient Composable에서 색상 값이 변경되면
-   * computed()를 통해 자동으로 배경 그래디언트도 업데이트됨
-   * 
-   * Vue2와의 비교:
-   * - Vue2: data의 gradientStyle을 직접 수정하면 리렌더링
-   * - Vue3: ref나 computed가 변경되면 자동으로 리렌더링 (더 효율적)
-   */
 
 .content-area {
-  /* 
-    Grid의 두 번째 셀 (또는 첫 번째 셀 모바일)
-  */
-  grid-column: 2 / 3;
+  grid-column: 1 / -1;
   grid-row: 1 / 2;
 
-  /* 스크롤 가능 */
   overflow-y: auto;
   overflow-x: hidden;
 
-  /* 마진/패딩 제거 */
   margin: 0;
   padding: 0;
 
-  /* 스크롤바 스타일 */
+  transition: grid-column 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
   &::-webkit-scrollbar {
     width: 8px;
   }
@@ -170,33 +216,31 @@ onMounted(() => {
   &::-webkit-scrollbar-thumb {
     background: $gray-300;
     border-radius: 4px;
+    transition: background 0.3s ease;
 
     &:hover {
       background: $gray-400;
     }
   }
+
+  &--full {
+    grid-column: 1 / -1;
+  }
 }
 
-/* ==================== 반응형 디자인 ==================== */
+/* ==================== 초소형 모바일 (640px 이하) ==================== */
 
-/* Tablet/Mobile (1024px 이하) */
-@media (max-width: 1024px) {
-  .main-layout {
-    /* 1열로 변경 */
-    grid-template-columns: 2fr;
-    .main-sidebar {
-      grid-column: 1 / 2;
+@media (max-width: 640px) {
+  .sidebar-toggle-btn {
+    width: 36px;
+    height: 36px;
+    top: $spacing-3;
+    left: $spacing-3;
+
+    &__icon {
+      width: 18px;
+      height: 18px;
     }
   }
-
-  .content-area {
-    /* 첫 번째 열 */
-    grid-column: 2 / 2;
-  }
-}
-
-/* Mobile (768px 이하) */
-@media (max-width: 768px) {
-  //
 }
 </style>

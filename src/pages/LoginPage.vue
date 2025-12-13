@@ -7,7 +7,7 @@
           <div class="login-header">
             <h1 class="login-title">로 그 인</h1>
             <p class="login-subtitle">
-              {{ configStore.office }} AI Packaging 에 오신것을 환영합니다
+              {{ configStore.office }} Packaging.AI 에 오신것을 환영합니다
             </p>
           </div>
           <form class="login-form" @submit.prevent="handleLogin">

@@ -1,10 +1,10 @@
-# OCI AI Packaging - 서비스 페이지
+# Packaging.AI - 서비스 페이지
 
 > LLM 기반 ChatGPT와 유사한 AI 에이전트 서비스 웹페이지
 
 ## 📋 프로젝트 개요
 
-OCI AI Packaging는 내부 직원들을 위한 AI 에이전트 기반 서비스입니다.
+Packaging.AI는 내부 직원들을 위한 AI 에이전트 기반 서비스입니다.
 
 - **주요 기능**: AI 챗봇, 다중 에이전트 선택, 문서/이미지 업로드
 - **아키텍처**: Frontend (Vue3) - Backend (FastAPI) - Database (PostgreSQL)
@@ -29,7 +29,7 @@ OCI AI Packaging는 내부 직원들을 위한 AI 에이전트 기반 서비스�
 ## 📁 프로젝트 구조
 
 ```
-oci-ai-works/
+ai-works/
 ├── src/
 │   ├── assets/              # 정적 자산 및 스타일
 │   │   ├── styles/
@@ -77,7 +77,7 @@ oci-ai-works/
 ```bash
 # 저장소 클론
 git clone <repository-url>
-cd oci-ai-works
+cd ai-works
 
 # 의존성 설치
 npm install
